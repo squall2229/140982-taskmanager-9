@@ -1,3 +1,5 @@
+'use strict';
+
 const menu = () => {
   return `
     <section class="control__btn-wrap">
@@ -28,8 +30,8 @@ const menu = () => {
         >STATISTICS</label
       >
     </section>
-  `
-}
+  `;
+};
 
 const search = () => {
   return `
@@ -42,8 +44,8 @@ const search = () => {
       />
       <label class="visually-hidden" for="search__input">Search</label>
     </section>
-  `
-}
+  `;
+};
 
 const filter = () => {
   return `
@@ -115,8 +117,8 @@ const filter = () => {
         >Archive <span class="filter__archive-count">115</span></label
       >
     </section>
-  `
-}
+  `;
+};
 
 const card = () => {
   return `
@@ -185,8 +187,8 @@ const card = () => {
         </div>
       </div>
     </article>
-  `
-}
+  `;
+};
 
 const cardEdit = () => {
   return `
@@ -457,41 +459,41 @@ const cardEdit = () => {
         </div>
       </form>
     </article>
-  `
-}
+  `;
+};
 
 const loadMoreButton = () => {
-  return `<button class="load-more" type="button">load more</button>`
-}
+  return `<button class="load-more" type="button">load more</button>`;
+};
 
 const renderComponent = (container, renderHtml) => {
-  const element = document.createElement('template')
+  const element = document.createElement(`template`);
 
-  element.innerHTML = renderHtml()
-  container.append(element.content)
-}
+  element.innerHTML = renderHtml();
+  container.append(element.content);
+};
 
-const COUNT_CARDS = 3
+const COUNT_CARDS = 3;
 
-const main= document.querySelector('.main')
-const mainControl = document.querySelector('.main__control')
-const board = document.createElement('section')
-const boardTasks = document.createElement('div')
+const main = document.querySelector(`.main`);
+const mainControl = document.querySelector(`.main__control`);
+const board = document.createElement(`section`);
+const boardTasks = document.createElement(`div`);
 
-board.classList.add('board', 'container')
-boardTasks.classList.add('board__tasks')
+board.classList.add(`board`, `container`);
+boardTasks.classList.add(`board__tasks`);
 
-renderComponent(boardTasks, cardEdit)
+renderComponent(boardTasks, cardEdit);
 
 for (let i = 0; i < COUNT_CARDS; i++) {
-  renderComponent(boardTasks, card)
+  renderComponent(boardTasks, card);
 }
 
-renderComponent(mainControl, menu)
-renderComponent(main, search)
-renderComponent(main, filter)
+renderComponent(mainControl, menu);
+renderComponent(main, search);
+renderComponent(main, filter);
 
-board.appendChild(boardTasks)
-main.appendChild(board)
+board.appendChild(boardTasks);
+main.appendChild(board);
 
-renderComponent(board, loadMoreButton)
+renderComponent(board, loadMoreButton);
