@@ -1,6 +1,13 @@
 'use strict';
 
-const menu = () => {
+const COUNT_CARDS = 3;
+
+const main = document.querySelector(`.main`);
+const mainControl = document.querySelector(`.main__control`);
+const board = document.createElement(`section`);
+const boardTasks = document.createElement(`div`);
+
+const getMenu = () => {
   return `
     <section class="control__btn-wrap">
       <input
@@ -33,7 +40,7 @@ const menu = () => {
   `;
 };
 
-const search = () => {
+const getSearch = () => {
   return `
     <section class="main__search search container">
       <input
@@ -47,7 +54,7 @@ const search = () => {
   `;
 };
 
-const filter = () => {
+const getFilter = () => {
   return `
     <section class="main__filter filter container">
       <input
@@ -120,7 +127,7 @@ const filter = () => {
   `;
 };
 
-const card = () => {
+const getCard = () => {
   return `
     <article class="card card--black">
       <div class="card__form">
@@ -190,7 +197,7 @@ const card = () => {
   `;
 };
 
-const cardEdit = () => {
+const getCardEdit = () => {
   return `
      <article class="card card--edit card--yellow card--repeat">
       <form class="card__form" method="get">
@@ -462,7 +469,7 @@ const cardEdit = () => {
   `;
 };
 
-const loadMoreButton = () => {
+const getLoadMoreButton = () => {
   return `<button class="load-more" type="button">load more</button>`;
 };
 
@@ -473,27 +480,20 @@ const renderComponent = (container, renderHtml) => {
   container.append(element.content);
 };
 
-const COUNT_CARDS = 3;
-
-const main = document.querySelector(`.main`);
-const mainControl = document.querySelector(`.main__control`);
-const board = document.createElement(`section`);
-const boardTasks = document.createElement(`div`);
-
 board.classList.add(`board`, `container`);
 boardTasks.classList.add(`board__tasks`);
 
-renderComponent(boardTasks, cardEdit);
+renderComponent(boardTasks, getCardEdit);
 
 for (let i = 0; i < COUNT_CARDS; i++) {
-  renderComponent(boardTasks, card);
+  renderComponent(boardTasks, getCard);
 }
 
-renderComponent(mainControl, menu);
-renderComponent(main, search);
-renderComponent(main, filter);
+renderComponent(mainControl, getMenu);
+renderComponent(main, getSearch);
+renderComponent(main, getFilter);
 
 board.appendChild(boardTasks);
 main.appendChild(board);
 
-renderComponent(board, loadMoreButton);
+renderComponent(board, getLoadMoreButton);
