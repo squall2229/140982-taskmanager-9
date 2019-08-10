@@ -4,12 +4,15 @@ const COUNT_CARDS = 3;
 
 const main = document.querySelector(`.main`);
 const mainControl = document.querySelector(`.main__control`);
-const board = document.createElement(`section`);
-const boardTasks = document.createElement(`div`);
 
-const getMenu = () => {
-  return `
-    <section class="control__btn-wrap">
+const getBoardTemplate = () => {
+  return `<section class="board container">
+    <div class="board__tasks"></div>
+  </section>`;
+};
+
+const getMenuTemplate = () => {
+  return ` <section class="control__btn-wrap">
       <input
         type="radio"
         name="control"
@@ -40,7 +43,7 @@ const getMenu = () => {
   `;
 };
 
-const getSearch = () => {
+const getSearchTemplate = () => {
   return `
     <section class="main__search search container">
       <input
@@ -54,7 +57,7 @@ const getSearch = () => {
   `;
 };
 
-const getFilter = () => {
+const getFilterTemplate = () => {
   return `
     <section class="main__filter filter container">
       <input
@@ -127,7 +130,17 @@ const getFilter = () => {
   `;
 };
 
-const getCard = () => {
+const getSortTemplate = () => {
+  return `
+    <div class="board__filter-list">
+      <a href="#" class="board__filter">SORT BY DEFAULT</a>
+      <a href="#" class="board__filter">SORT BY DATE up</a>
+      <a href="#" class="board__filter">SORT BY DATE down</a>
+    </div
+  `;
+};
+
+const getCardTemplate = () => {
   return `
     <article class="card card--black">
       <div class="card__form">
@@ -197,7 +210,7 @@ const getCard = () => {
   `;
 };
 
-const getCardEdit = () => {
+const getCardEditTemplate = () => {
   return `
      <article class="card card--edit card--yellow card--repeat">
       <form class="card__form" method="get">
@@ -469,31 +482,27 @@ const getCardEdit = () => {
   `;
 };
 
-const getLoadMoreButton = () => {
+const getLoadMoreButtonTemplate = () => {
   return `<button class="load-more" type="button">load more</button>`;
 };
 
-const renderComponent = (container, renderHtml) => {
-  const element = document.createElement(`template`);
-
-  element.innerHTML = renderHtml();
-  container.append(element.content);
+const renderComponent = (container, template, place) => {
+  container.insertAdjacentHTML(place, template);
 };
 
-board.classList.add(`board`, `container`);
-boardTasks.classList.add(`board__tasks`);
+renderComponent(mainControl, getMenuTemplate(), `beforeend`);
+renderComponent(main, getSearchTemplate(), `beforeend`);
+renderComponent(main, getFilterTemplate(), `beforeend`);
+renderComponent(main, getBoardTemplate(), `beforeend`);
 
-renderComponent(boardTasks, getCardEdit);
+const board = document.querySelector(`.board`);
+const boardTasks = document.querySelector(`.board__tasks`);
+
+renderComponent(board, getSortTemplate(), `afterbegin`);
+renderComponent(boardTasks, getCardEditTemplate(), `beforeend`);
 
 for (let i = 0; i < COUNT_CARDS; i++) {
-  renderComponent(boardTasks, getCard);
+  renderComponent(boardTasks, getCardTemplate(), `beforeend`);
 }
 
-renderComponent(mainControl, getMenu);
-renderComponent(main, getSearch);
-renderComponent(main, getFilter);
-
-board.appendChild(boardTasks);
-main.appendChild(board);
-
-renderComponent(board, getLoadMoreButton);
+renderComponent(board, getLoadMoreButtonTemplate(), `beforeend`);
