@@ -10,20 +10,33 @@ import {getTaskEditTemplate} from './components/task-edit';
 import {getTaskTemplate} from './components/task';
 import {getLoadMoreButtonTemplate} from './components/load-button';
 
-const COUNT_TASK_VIEW = 8;
+const COUNT_TASKS_LOAD = 8;
+let page = 0;
+let currentCountTasks = COUNT_TASKS_LOAD;
 
 const main = document.querySelector(`.main`);
 const mainControl = document.querySelector(`.main__control`);
 
 const taskList = getTaskList();
+const taskEdit = taskList[0];
 const filterList = getFilters(taskList);
 
 const renderComponent = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
 
-const loadMoreTasks = () => {
+const checkHiddenButton = () => {
+  if (currentCountTasks >= taskList.length) {
+    buttonLoadMore.classList.add(`visually-hidden`);
+  }
+};
 
+const renderTasks = () => {
+  checkHiddenButton();
+
+  taskList
+    .filter((task, index) => index + 1 > page * COUNT_TASKS_LOAD && index < currentCountTasks)
+    .forEach((task) => renderComponent(boardTasks, getTaskTemplate(task), `beforeend`));
 };
 
 renderComponent(mainControl, getMenuTemplate(), `beforeend`);
@@ -35,21 +48,18 @@ const board = document.querySelector(`.board`);
 const boardTasks = document.querySelector(`.board__tasks`);
 
 renderComponent(board, getSortTemplate(), `afterbegin`);
-
-const taskEdit = taskList[0];
-const tasks = taskList.filter((el, index) => index > 0 && index <= COUNT_TASK_VIEW - 1);
-
 renderComponent(boardTasks, getTaskEditTemplate(taskEdit), `beforeend`);
-
-for (let task of tasks) {
-  renderComponent(boardTasks, getTaskTemplate(task), `beforeend`);
-}
-
 renderComponent(board, getLoadMoreButtonTemplate(), `beforeend`);
 
 const buttonLoadMore = document.querySelector(`.load-more`);
 
+renderTasks();
+
 buttonLoadMore.addEventListener(`click`, (event) => {
   event.preventDefault();
-  loadMoreTasks();
+
+  page += 1;
+  currentCountTasks += COUNT_TASKS_LOAD;
+  renderTasks();
 });
+

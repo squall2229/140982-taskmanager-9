@@ -11,13 +11,13 @@ const getTask = () => ({
     `practice`
   ]),
   repeatingDays: {
-    'mo': Boolean(Math.round(Math.random())),
+    'mo': false,
     'tu': Boolean(Math.round(Math.random())),
     'we': Boolean(Math.round(Math.random())),
     'th': Boolean(Math.round(Math.random())),
-    'fr': Boolean(Math.round(Math.random())),
-    'sa': Boolean(Math.round(Math.random())),
-    'su': Boolean(Math.round(Math.random()))
+    'fr': false,
+    'sa': false,
+    'su': false
   },
   color: [
     `black`,
