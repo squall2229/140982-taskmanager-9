@@ -55,7 +55,7 @@ export const getTaskTemplate = ({
               <div class="card__dates">
                 <div class="card__date-deadline">
                   <p class="card__input-deadline-wrap">
-                    <span class="card__date">${new Date(dueDate).toDateString()}</span>
+                    <span class="card__date">${dueDate.toDateString()}</span>
                   </p>
                 </div>
               </div>

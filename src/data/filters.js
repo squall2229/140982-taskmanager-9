@@ -1,11 +1,11 @@
 import {
-  getCountAllTasks,
-  getCountOverDueTasks,
-  getCountTodayTasks,
-  getCountFavoritesTasks,
-  getCountRepeatingTasks,
-  getCountTagTasks,
-  getCountArchiveTasks
+  getAmountAllTasks,
+  getAmountOverDueTasks,
+  getAmountTodayTasks,
+  getAmountFavoritesTasks,
+  getAmountRepeatingTasks,
+  getAmountTagTasks,
+  getAmountArchiveTasks
 } from '../utils/filters';
 
 const FILTERS_TITLES = [
@@ -18,28 +18,25 @@ const FILTERS_TITLES = [
   `archive`
 ];
 
+const addCountForFilters = (title, taskList) => ({
+  title,
+  count: getCountTaskByFilter(title, taskList)
+});
+
 const getCountTaskByFilter = (filterTitle, taskList) => {
-  const countAllTasks = getCountAllTasks(taskList);
+  const filtersCount = {
+    all: getAmountAllTasks(taskList),
+    overdue: getAmountOverDueTasks(taskList),
+    today: getAmountTodayTasks(taskList),
+    favorites: getAmountFavoritesTasks(taskList),
+    repeating: getAmountRepeatingTasks(taskList),
+    tags: getAmountTagTasks(taskList),
+    archive: getAmountArchiveTasks(taskList)
+  };
 
-  switch (filterTitle) {
-    case `all`: return countAllTasks;
-    case `overdue`: return getCountOverDueTasks(taskList);
-    case `today`: return getCountTodayTasks(taskList);
-    case `favorites`: return getCountFavoritesTasks(taskList);
-    case `repeating`: return getCountRepeatingTasks(taskList);
-    case `tags`: return getCountTagTasks(taskList);
-    case `archive`: return getCountArchiveTasks(taskList);
-    default: return countAllTasks;
-  }
+  return filtersCount[filterTitle];
 };
 
-const getFilters = (taskList) => {
-  return FILTERS_TITLES.map((title) => {
-    return ({
-      title,
-      count: getCountTaskByFilter(title, taskList)
-    });
-  });
-};
+const getFilters = (taskList) => FILTERS_TITLES.map((title) => addCountForFilters(title, taskList));
 
 export default getFilters;

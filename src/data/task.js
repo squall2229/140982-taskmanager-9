@@ -1,20 +1,37 @@
+import {getDueDate} from '../utils/date';
+import {getRandomArray, getRandomIndex, getRandomBoolean, getRandomAmountByLength} from '../utils/random';
+
+const TAGS = [
+  `homework`,
+  `theory`,
+  `practice`,
+  `intensive`,
+  `keks`
+];
+
+const MAX_TAGS_TASK = 3;
+
+const getTags = () => {
+  const tags = new Set();
+
+  getRandomArray(MAX_TAGS_TASK).forEach(() => tags.add(TAGS[getRandomIndex(TAGS.length)]));
+
+  return tags;
+};
+
 const getTask = () => ({
   description: [
     `Изучить теорию`,
     `Сделать домашку`,
     `Пройти интенсив на соточку`,
-  ][Math.floor(Math.random() * 3)],
-  dueDate: Date.now() + 1 + Math.floor(Math.random() * 7) * 24 * 60 * 60 * 1000,
-  tags: new Set([
-    `homework`,
-    `theory`,
-    `practice`
-  ]),
+  ][getRandomAmountByLength(3)],
+  dueDate: getDueDate(),
+  tags: getTags(),
   repeatingDays: {
     'mo': false,
-    'tu': Boolean(Math.round(Math.random())),
-    'we': Boolean(Math.round(Math.random())),
-    'th': Boolean(Math.round(Math.random())),
+    'tu': getRandomBoolean(),
+    'we': getRandomBoolean(),
+    'th': getRandomBoolean(),
     'fr': false,
     'sa': false,
     'su': false
@@ -25,9 +42,9 @@ const getTask = () => ({
     `blue`,
     `green`,
     `pink`,
-  ][Math.floor(Math.random() * 5)],
-  isFavorite: Boolean(Math.round(Math.random())),
-  isArchive: Boolean(Math.round(Math.random()))
+  ][getRandomAmountByLength(5)],
+  isFavorite: getRandomBoolean(),
+  isArchive: getRandomBoolean()
 });
 
 export default getTask;

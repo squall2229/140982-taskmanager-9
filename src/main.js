@@ -27,7 +27,7 @@ const renderComponent = (container, template, place) => {
 
 const checkHiddenButton = () => {
   if (currentCountTasks >= taskList.length) {
-    buttonLoadMore.classList.add(`visually-hidden`);
+    buttonLoadMore.remove();
   }
 };
 
@@ -35,7 +35,7 @@ const renderTasks = () => {
   checkHiddenButton();
 
   taskList
-    .filter((task, index) => index + 1 > page * COUNT_TASKS_LOAD && index < currentCountTasks)
+    .slice(page * COUNT_TASKS_LOAD, currentCountTasks)
     .forEach((task) => renderComponent(boardTasks, getTaskTemplate(task), `beforeend`));
 };
 

@@ -1,5 +1,5 @@
-const isRepeat = (repeatingDays) => {
-  return Object.keys(repeatingDays).some((day) => repeatingDays[day]);
+const isRepeat = (data) => {
+  return Object.keys(data).some((key) => data[key]);
 };
 
 export default isRepeat;

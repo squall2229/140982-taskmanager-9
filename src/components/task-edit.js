@@ -1,6 +1,6 @@
 import isRepeat from '../utils/isRepeat';
 
-const COLORS = [
+const COLOURS = [
   `black`,
   `yellow`,
   `blue`,
@@ -8,7 +8,7 @@ const COLORS = [
   `pink`,
 ];
 
-const getRepeatDatTemplate = (day, checked) => {
+const getRepeatDateTemplate = (day, checked) => {
   return `
     <input
       class="visually-hidden card__repeat-day-input"
@@ -72,12 +72,12 @@ export const getTaskEditTemplate = ({
       <form class="card__form" method="get">
         <div class="card__inner">
           <div class="card__control">
-            <button type="button" class="card__btn ${isArchive ? `card__btn--archive` : ``}">
+            <button type="button" class="card__btn card__btn--archive ${isArchive ? `card__btn--disabled` : ``}">
               archive
             </button>
             <button
               type="button"
-              class="card__btn ${isFavorite ? `card__btn--favorites` : ``} card__btn--disabled"
+              class="card__btn card__btn--favorites ${isFavorite ? `card__btn--disabled` : ``}"
             >
               favorites
             </button>
@@ -113,7 +113,7 @@ export const getTaskEditTemplate = ({
                       type="text"
                       placeholder=""
                       name="date"
-                      value="${new Date(dueDate).toDateString()}"
+                      value="${dueDate.toDateString()}"
                     />
                   </label>
                 </fieldset>
@@ -124,7 +124,7 @@ export const getTaskEditTemplate = ({
 
                 <fieldset class="card__repeat-days">
                   <div class="card__repeat-days-inner">
-                    ${Object.keys(repeatingDays).map((day) => getRepeatDatTemplate(day, repeatingDays[day])).join(``)}
+                    ${Object.keys(repeatingDays).map((day) => getRepeatDateTemplate(day, repeatingDays[day])).join(``)}
                   </div>
                 </fieldset>
               </div>
@@ -148,7 +148,7 @@ export const getTaskEditTemplate = ({
             <div class="card__colors-inner">
               <h3 class="card__colors-title">Color</h3>
               <div class="card__colors-wrap">
-                ${COLORS.map((element) => getColorTemplate(element, color === element)).join(``)}
+                ${COLOURS.map((element) => getColorTemplate(element, color === element)).join(``)}
               </div>
             </div>
           </div>
