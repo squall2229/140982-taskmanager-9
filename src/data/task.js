@@ -1,20 +1,21 @@
 import {getDueDate} from '../utils/date';
 import {getRandomArray, getRandomIndex, getRandomBoolean, getRandomAmountByLength} from '../utils/random';
 
-const TAGS = [
-  `homework`,
-  `theory`,
-  `practice`,
-  `intensive`,
-  `keks`
-];
-
-const MAX_TAGS_TASK = 3;
+const TAGS = {
+  maxOptions: 3,
+  options: [
+    `homework`,
+    `theory`,
+    `practice`,
+    `intensive`,
+    `keks`
+  ]
+};
 
 const getTags = () => {
   const tags = new Set();
 
-  getRandomArray(MAX_TAGS_TASK).forEach(() => tags.add(TAGS[getRandomIndex(TAGS.length)]));
+  getRandomArray(TAGS.maxOptions).forEach(() => tags.add(TAGS.options[getRandomIndex(TAGS.options.length)]));
 
   return tags;
 };

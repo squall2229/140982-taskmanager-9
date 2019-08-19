@@ -18,21 +18,21 @@ const FILTERS_TITLES = [
   `archive`
 ];
 
+const filtersCount = {};
+
 const addCountForFilters = (title, taskList) => ({
   title,
   count: getCountTaskByFilter(title, taskList)
 });
 
 const getCountTaskByFilter = (filterTitle, taskList) => {
-  const filtersCount = {
-    all: getAmountAllTasks(taskList),
-    overdue: getAmountOverDueTasks(taskList),
-    today: getAmountTodayTasks(taskList),
-    favorites: getAmountFavoritesTasks(taskList),
-    repeating: getAmountRepeatingTasks(taskList),
-    tags: getAmountTagTasks(taskList),
-    archive: getAmountArchiveTasks(taskList)
-  };
+  filtersCount.all = getAmountAllTasks(taskList);
+  filtersCount.overdue = getAmountOverDueTasks(taskList);
+  filtersCount.today = getAmountTodayTasks(taskList);
+  filtersCount.favorites = getAmountFavoritesTasks(taskList);
+  filtersCount.repeating = getAmountRepeatingTasks(taskList);
+  filtersCount.tags = getAmountTagTasks(taskList);
+  filtersCount.archive = getAmountArchiveTasks(taskList);
 
   return filtersCount[filterTitle];
 };

@@ -19,7 +19,7 @@ export const getAmountRepeatingTasks = (taskList) => {
 };
 
 export const getAmountTagTasks = (taskList) => {
-  return taskList.filter((task) => task.tags.size);
+  return taskList.reduce((summ, current) => summ + current.tags.size, 0);
 };
 
 export const getAmountArchiveTasks = (taskList) => {
