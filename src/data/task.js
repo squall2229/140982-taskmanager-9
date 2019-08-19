@@ -1,9 +1,9 @@
 import {getDueDate} from '../utils/date';
 import {getRandomArray, getRandomIndex, getRandomBoolean, getRandomAmountByLength} from '../utils/random';
 
-const TAGS = {
+const OPTIONS = {
   maxOptions: 3,
-  options: [
+  tags: [
     `homework`,
     `theory`,
     `practice`,
@@ -15,7 +15,7 @@ const TAGS = {
 const getTags = () => {
   const tags = new Set();
 
-  getRandomArray(TAGS.maxOptions).forEach(() => tags.add(TAGS.options[getRandomIndex(TAGS.options.length)]));
+  getRandomArray(OPTIONS.maxOptions).forEach(() => tags.add(OPTIONS.tags[getRandomIndex(OPTIONS.tags.length)]));
 
   return tags;
 };
@@ -29,13 +29,13 @@ const getTask = () => ({
   dueDate: getDueDate(),
   tags: getTags(),
   repeatingDays: {
-    'mo': false,
-    'tu': getRandomBoolean(),
-    'we': getRandomBoolean(),
-    'th': getRandomBoolean(),
-    'fr': false,
-    'sa': false,
-    'su': false
+    'Mo': false,
+    'Tu': getRandomBoolean(),
+    'We': getRandomBoolean(),
+    'Th': getRandomBoolean(),
+    'Fr': false,
+    'Sa': false,
+    'Su': false
   },
   color: [
     `black`,
