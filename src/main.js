@@ -1,6 +1,8 @@
 import getTaskList from './data/task-list';
 import getFilters from './data/filters';
 
+import {getAllTasks} from './utils/filters';
+
 import {getMenuTemplate} from './components/menu';
 import {getSearchTemplate} from './components/search';
 import {getFilterListTemplate} from './components/filter-list';
@@ -18,7 +20,7 @@ const main = document.querySelector(`.main`);
 const mainControl = document.querySelector(`.main__control`);
 
 const taskList = getTaskList();
-const taskEdit = taskList[0];
+const taskEdit = getAllTasks(taskList)[0];
 const filterList = getFilters(taskList);
 
 const renderComponent = (container, template, place) => {

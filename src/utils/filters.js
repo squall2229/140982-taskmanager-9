@@ -1,6 +1,8 @@
 import isRepeat from './isRepeat';
 
-export const getAmountAllTasks = (taskList) => taskList.filter((task) => !task.isArchive).length;
+export const getAllTasks = (taskList) => taskList.filter((task) => !task.isArchive);
+
+export const getAmountAllTasks = (taskList) => getAllTasks(taskList).length;
 
 export const getAmountOverDueTasks = (taskList) => {
   return taskList.filter((task) => Date.now() - task.dueDate.getTime() > 0).length;
