@@ -1,9 +1,13 @@
-import {getDueDate} from '../utils/date';
-import {getRandomArray, getRandomIndex, getRandomBoolean, getRandomAmountByLength} from '../utils/random';
+import {
+  getRandomArray,
+  getRandomIndex,
+  getRandomBoolean,
+  getRandomAmountByLength,
+  getRandomInteger} from '../utils/random';
 
-const OPTIONS = {
-  maxOptions: 3,
-  tags: [
+const tagsParams = {
+  MAX_OPTIONS: 3,
+  OPTIONS: [
     `homework`,
     `theory`,
     `practice`,
@@ -12,10 +16,14 @@ const OPTIONS = {
   ]
 };
 
+const WEEK = 7 * 24 * 60 * 60 * 1000;
+
+const getDueDate = () => new Date(Date.now() + getRandomInteger(-WEEK, WEEK));
+
 const getTags = () => {
   const tags = new Set();
 
-  getRandomArray(OPTIONS.maxOptions).forEach(() => tags.add(OPTIONS.tags[getRandomIndex(OPTIONS.tags.length)]));
+  getRandomArray(tagsParams.MAX_OPTIONS).forEach(() => tags.add(tagsParams.OPTIONS[getRandomIndex(tagsParams.OPTIONS.length)]));
 
   return tags;
 };
