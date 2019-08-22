@@ -1,7 +1,7 @@
-import getTaskList from './data/task-list';
+import getTasks from './data/tasks';
 import getFilters from './data/filters';
 
-import {getAllTasks} from './utils/filters';
+import {getAllTasks} from './utils/tasks';
 
 import {getMenuTemplate} from './components/menu';
 import {getSearchTemplate} from './components/search';
@@ -19,16 +19,16 @@ let currentCountTasks = COUNT_TASKS_LOAD;
 const main = document.querySelector(`.main`);
 const mainControl = document.querySelector(`.main__control`);
 
-const taskList = getTaskList();
-const taskEdit = getAllTasks(taskList)[0];
-const filterList = getFilters(taskList);
+const tasks = getTasks();
+const taskEdit = getAllTasks(tasks)[0];
+const filterList = getFilters(tasks);
 
 const renderComponent = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
 
 const checkHiddenButton = () => {
-  if (currentCountTasks >= taskList.length) {
+  if (currentCountTasks >= tasks.length) {
     buttonLoadMore.remove();
   }
 };
@@ -36,7 +36,7 @@ const checkHiddenButton = () => {
 const renderTasks = () => {
   checkHiddenButton();
 
-  taskList
+  tasks
     .slice(page * COUNT_TASKS_LOAD, currentCountTasks)
     .forEach((task) => renderComponent(boardTasks, getTaskTemplate(task), `beforeend`));
 };

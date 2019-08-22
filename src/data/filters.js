@@ -18,25 +18,25 @@ const FILTERS_TITLES = [
   `archive`
 ];
 
-const addCountForFilters = (title, taskList) => ({
-  title,
-  count: getCountTaskByFilter(title, taskList)
-});
-
-const getCountTaskByFilter = (filterTitle, taskList) => {
-  const filtersCount = {
-    all: getAmountAllTasks(taskList),
-    overdue: getAmountOverDueTasks(taskList),
-    today: getAmountTodayTasks(taskList),
-    favorites: getAmountFavoritesTasks(taskList),
-    repeating: getAmountRepeatingTasks(taskList),
-    tags: getAmountTagTasks(taskList),
-    archive: getAmountArchiveTasks(taskList)
-  };
-
-  return filtersCount[filterTitle];
+const filtersCount = {
+  all: getAmountAllTasks,
+  overdue: getAmountOverDueTasks,
+  today: getAmountTodayTasks,
+  favorites: getAmountFavoritesTasks,
+  repeating: getAmountRepeatingTasks,
+  tags: getAmountTagTasks,
+  archive: getAmountArchiveTasks
 };
 
-const getFilters = (taskList) => FILTERS_TITLES.map((title) => addCountForFilters(title, taskList));
+const addCountForFilters = (title, tasks) => ({
+  title,
+  count: getCountTaskByFilter(title, tasks)
+});
+
+const getCountTaskByFilter = (filterTitle, tasks) => {
+  return filtersCount[filterTitle](tasks);
+};
+
+const getFilters = (tasks) => FILTERS_TITLES.map((title) => addCountForFilters(title, tasks));
 
 export default getFilters;
