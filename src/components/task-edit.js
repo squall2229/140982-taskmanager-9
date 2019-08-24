@@ -1,15 +1,42 @@
 import isRepeat from '../utils/isRepeat';
+import {createElement} from '../utils/render';
 
-const COLOURS = [
-  `black`,
-  `yellow`,
-  `blue`,
-  `green`,
-  `pink`,
-];
+class TaskEdit {
+  constructor({description, dueDate, tags, color, repeatingDays, isFavorite, isArchive}) {
+    this._description = description;
+    this._dueDate = dueDate;
+    this._tags = tags;
+    this._color = color;
+    this._isFavorite = isFavorite;
+    this._isArchive = isArchive;
+    this._element = null;
+    this._repeatingDays = repeatingDays;
 
-const getRepeatDateTemplate = (day, checked) => {
-  return `
+    this._COLOURS = [
+      `black`,
+      `yellow`,
+      `blue`,
+      `green`,
+      `pink`,
+    ];
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    if (this._element) {
+      this._element = null;
+    }
+  }
+
+  getRepeatDateTemplate(day, checked) {
+    return `
     <input
       class="visually-hidden card__repeat-day-input"
       type="checkbox"
@@ -21,10 +48,10 @@ const getRepeatDateTemplate = (day, checked) => {
     <label class="card__repeat-day" for="repeat-${day}-4"
       >${day}</label
     >`.trim();
-};
+  }
 
-const getTagTemplate = (tag) => {
-  return `
+  getTagTemplate(tag) {
+    return `
     <span class="card__hashtag-inner">
       <input
         type="hidden"
@@ -39,10 +66,10 @@ const getTagTemplate = (tag) => {
         delete
       </button>
     </span>`.trim();
-};
+  }
 
-const getColorTemplate = (color, checked) => {
-  return `
+  getColorTemplate(color, checked) {
+    return `
     <input
       type="radio"
       id="color-${color}-4"
@@ -56,28 +83,20 @@ const getColorTemplate = (color, checked) => {
       class="card__color card__color--${color}"
       >${color}</label
     >`.trim();
-};
+  }
 
-export const getTaskEditTemplate = ({
-  description,
-  dueDate,
-  repeatingDays,
-  tags,
-  color,
-  isFavorite,
-  isArchive
-}) => {
-  return `
-     <article class="card card--edit card--${color} ${isRepeat(repeatingDays) ? `card--repeat` : ``}">
+  getTemplate() {
+    return `
+     <article class="card card--edit card--${this._color} ${isRepeat(this._repeatingDays) ? `card--repeat` : ``}">
       <form class="card__form" method="get">
         <div class="card__inner">
           <div class="card__control">
-            <button type="button" class="card__btn card__btn--archive ${isArchive ? `card__btn--disabled` : ``}">
+            <button type="button" class="card__btn card__btn--archive ${this._isArchive ? `card__btn--disabled` : ``}">
               archive
             </button>
             <button
               type="button"
-              class="card__btn card__btn--favorites ${isFavorite ? `card__btn--disabled` : ``}"
+              class="card__btn card__btn--favorites ${this._isFavorite ? `card__btn--disabled` : ``}"
             >
               favorites
             </button>
@@ -95,7 +114,7 @@ export const getTaskEditTemplate = ({
                 class="card__text"
                 placeholder="Start typing your text here..."
                 name="text"
-              >${description}</textarea>
+              >${this._description}</textarea>
             </label>
           </div>
 
@@ -113,7 +132,7 @@ export const getTaskEditTemplate = ({
                       type="text"
                       placeholder=""
                       name="date"
-                      value="${dueDate.toDateString()}"
+                      value="${this._dueDate.toDateString()}"
                     />
                   </label>
                 </fieldset>
@@ -124,14 +143,14 @@ export const getTaskEditTemplate = ({
 
                 <fieldset class="card__repeat-days">
                   <div class="card__repeat-days-inner">
-                    ${Object.keys(repeatingDays).map((day) => getRepeatDateTemplate(day, repeatingDays[day])).join(``)}
+                    ${Object.keys(this._repeatingDays).map((day) => this.getRepeatDateTemplate(day, this._repeatingDays[day])).join(``)}
                   </div>
                 </fieldset>
               </div>
 
               <div class="card__hashtag">
                 <div class="card__hashtag-list">
-                  ${Array.from(tags).map(getTagTemplate).join(``)}
+                  ${Array.from(this._tags).map(this.getTagTemplate).join(``)}
                 </div>
 
                 <label>
@@ -148,7 +167,7 @@ export const getTaskEditTemplate = ({
             <div class="card__colors-inner">
               <h3 class="card__colors-title">Color</h3>
               <div class="card__colors-wrap">
-                ${COLOURS.map((element) => getColorTemplate(element, color === element)).join(``)}
+                ${this._COLOURS.map((element) => this.getColorTemplate(element, this._color === element)).join(``)}
               </div>
             </div>
           </div>
@@ -160,5 +179,8 @@ export const getTaskEditTemplate = ({
         </div>
       </form>
     </article>
-  `;
-};
+  `.trim();
+  }
+}
+
+export default TaskEdit;

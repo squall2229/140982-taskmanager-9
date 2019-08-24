@@ -1,40 +1,60 @@
 import isRepeat from '../utils/isRepeat';
+import {createElement} from '../utils/render';
 
-const getTagsList = (tags) => {
-  return Array.from(tags).map((tag) => getTagTemplate(tag)).join(``);
-};
+class Task {
+  constructor({description, dueDate, tags, color, repeatingDays, isFavorite, isArchive}) {
+    this._description = description;
+    this._dueDate = dueDate;
+    this._tags = tags;
+    this._color = color;
+    this._isFavorite = isFavorite;
+    this._isArchive = isArchive;
+    this._element = null;
+    this._repeatingDays = repeatingDays;
+  }
 
-const getTagTemplate = (title) => {
-  return (`<span class="card__hashtag-inner">
-    <span class="card__hashtag-name">
-      #${title}
-    </span>
-  </span>`.trim());
-};
+  getTagsList() {
+    return Array.from(this._tags).map((tag) => this.getTagTemplate(tag)).join(``);
+  }
 
-export const getTaskTemplate = ({
-  description,
-  dueDate,
-  repeatingDays,
-  tags,
-  color,
-  isFavorite,
-  isArchive
-}) => {
-  return `
-    <article class="card card--${color} ${isRepeat(repeatingDays) ? `card--repeat` : ``}">
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    if (this._element) {
+      this._element = null;
+    }
+  }
+
+  getTagTemplate(title) {
+    return `
+      <span class="card__hashtag-inner">
+        <span class="card__hashtag-name">
+          #${title}
+        </span>
+      </span>`.trim();
+  }
+
+  getTemplate() {
+    return `
+    <article class="card card--${this._color} ${isRepeat(this._repeatingDays) ? `card--repeat` : ``}">
       <div class="card__form">
         <div class="card__inner">
           <div class="card__control">
             <button type="button" class="card__btn card__btn--edit">
               edit
             </button>
-            <button type="button" class="card__btn card__btn--archive ${isArchive ? `card__btn--disabled` : ``}">
+            <button type="button" class="card__btn card__btn--archive ${this._isArchive ? `card__btn--disabled` : ``}">
               archive
             </button>
             <button
               type="button"
-              class="card__btn card__btn--favorites ${isFavorite ? `card__btn--disabled` : ``}"
+              class="card__btn card__btn--favorites ${this._isFavorite ? `card__btn--disabled` : ``}"
             >
               favorites
             </button>
@@ -47,7 +67,7 @@ export const getTaskTemplate = ({
           </div>
 
           <div class="card__textarea-wrap">
-            <p class="card__text">${description}</p>
+            <p class="card__text">${this._description}</p>
           </div>
 
           <div class="card__settings">
@@ -55,14 +75,14 @@ export const getTaskTemplate = ({
               <div class="card__dates">
                 <div class="card__date-deadline">
                   <p class="card__input-deadline-wrap">
-                    <span class="card__date">${dueDate.toDateString()}</span>
+                    <span class="card__date">${this._dueDate.toDateString()}</span>
                   </p>
                 </div>
               </div>
 
               <div class="card__hashtag">
                 <div class="card__hashtag-list">
-                  ${getTagsList(tags)}
+                  ${this.getTagsList(this._tags)}
                 </div>
               </div>
             </div>
@@ -71,4 +91,7 @@ export const getTaskTemplate = ({
       </div>
     </article>
   `.trim();
-};
+  }
+}
+
+export default Task;

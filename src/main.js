@@ -1,67 +1,65 @@
 import getTasks from './data/tasks';
 import getFilters from './data/filters';
 
-import {getAllTasks} from './utils/tasks';
+import {render, removeElement, Position} from './utils/render';
 
-import {getMenuTemplate} from './components/menu';
-import {getSearchTemplate} from './components/search';
-import {getFilterListTemplate} from './components/filter-list';
-import {getBoardTemplate} from './components/board';
-import {getSortTemplate} from './components/sort';
-import {getTaskEditTemplate} from './components/task-edit';
-import {getTaskTemplate} from './components/task';
-import {getLoadMoreButtonTemplate} from './components/load-button';
+import Menu from './components/menu';
+import Search from './components/search';
+import Filters from './components/filters';
+import Board from './components/board';
+import Sort from './components/sort';
+// import TaskEdit from './components/task-edit';
+import Task from './components/task';
+import LoadButton from './components/load-button';
 
 const COUNT_TASKS_LOAD = 8;
 let page = 0;
 let currentCountTasks = COUNT_TASKS_LOAD;
 
+const tasksData = getTasks();
+const filtersData = getFilters(tasksData);
+
+const menuElement = new Menu().getElement();
+const searchElement = new Search().getElement();
+const boardElement = new Board().getElement();
+const filtersElement = new Filters(filtersData).getElement();
+const sortElement = new Sort().getElement();
+const loadButton = new LoadButton();
+
 const main = document.querySelector(`.main`);
 const mainControl = document.querySelector(`.main__control`);
 
-const tasks = getTasks();
-const taskEdit = getAllTasks(tasks)[0];
-const filterList = getFilters(tasks);
-
-const renderComponent = (container, template, place) => {
-  container.insertAdjacentHTML(place, template);
-};
-
-const checkHiddenButton = () => {
-  if (currentCountTasks >= tasks.length) {
-    buttonLoadMore.remove();
-  }
+const renderTask = (taskMock) => {
+  const task = new Task(taskMock).getElement();
+  const boardTasks = boardElement.querySelector(`.board__tasks`);
+  render(boardTasks, task, Position.BEFOREEND);
 };
 
 const renderTasks = () => {
-  checkHiddenButton();
+  if (currentCountTasks >= tasksData.length) {
+    removeElement(loadButton.getElement());
+    loadButton.removeElement();
+  }
 
-  tasks
+  tasksData
     .slice(page * COUNT_TASKS_LOAD, currentCountTasks)
-    .forEach((task) => renderComponent(boardTasks, getTaskTemplate(task), `beforeend`));
+    .forEach(renderTask);
 };
 
-renderComponent(mainControl, getMenuTemplate(), `beforeend`);
-renderComponent(main, getSearchTemplate(), `beforeend`);
-renderComponent(main, getFilterListTemplate(filterList), `beforeend`);
-renderComponent(main, getBoardTemplate(), `beforeend`);
-
-const board = document.querySelector(`.board`);
-const boardTasks = document.querySelector(`.board__tasks`);
-
-renderComponent(board, getSortTemplate(), `afterbegin`);
-renderComponent(boardTasks, getTaskEditTemplate(taskEdit), `beforeend`);
-renderComponent(board, getLoadMoreButtonTemplate(), `beforeend`);
-
-const buttonLoadMore = document.querySelector(`.load-more`);
-
-renderTasks();
-
-buttonLoadMore.addEventListener(`click`, (event) => {
+loadButton.getElement().addEventListener(`click`, (event) => {
   event.preventDefault();
 
   page += 1;
   currentCountTasks += COUNT_TASKS_LOAD;
   renderTasks();
 });
+
+render(mainControl, menuElement, `beforeend`);
+render(main, searchElement, `beforeend`);
+render(main, filtersElement, `beforeend`);
+render(main, boardElement, `beforeend`);
+render(boardElement, sortElement, `afterbegin`);
+render(boardElement, loadButton.getElement(), `beforeend`);
+
+renderTasks();
 
