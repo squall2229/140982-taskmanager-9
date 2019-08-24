@@ -8,7 +8,7 @@ import Search from './components/search';
 import Filters from './components/filters';
 import Board from './components/board';
 import Sort from './components/sort';
-// import TaskEdit from './components/task-edit';
+import TaskEdit from './components/task-edit';
 import Task from './components/task';
 import LoadButton from './components/load-button';
 
@@ -30,9 +30,42 @@ const main = document.querySelector(`.main`);
 const mainControl = document.querySelector(`.main__control`);
 
 const renderTask = (taskMock) => {
-  const task = new Task(taskMock).getElement();
-  const boardTasks = boardElement.querySelector(`.board__tasks`);
-  render(boardTasks, task, Position.BEFOREEND);
+  const task = new Task(taskMock);
+  const taskEdit = new TaskEdit(taskMock);
+  const tasksContainer = boardElement.querySelector(`.board__tasks`);
+
+  const onEscKeyDown = (evt) => {
+    if (evt.key === `Escape` || evt.key === `Esc`) {
+      tasksContainer.replaceChild(task.getElement(), taskEdit.getElement());
+      document.removeEventListener(`keydown`, onEscKeyDown);
+    }
+  };
+
+  task.getElement()
+    .querySelector(`.card__btn--edit`)
+    .addEventListener(`click`, () => {
+      tasksContainer.replaceChild(taskEdit.getElement(), task.getElement());
+      document.addEventListener(`keydown`, onEscKeyDown);
+    });
+
+  taskEdit.getElement().querySelector(`textarea`)
+    .addEventListener(`focus`, () => {
+      document.removeEventListener(`keydown`, onEscKeyDown);
+    });
+
+  taskEdit.getElement().querySelector(`textarea`)
+    .addEventListener(`blur`, () => {
+      document.addEventListener(`keydown`, onEscKeyDown);
+    });
+
+  taskEdit.getElement()
+    .querySelector(`.card__save`)
+    .addEventListener(`click`, () => {
+      tasksContainer.replaceChild(task.getElement(), taskEdit.getElement());
+      document.removeEventListener(`keydown`, onEscKeyDown);
+    });
+
+  render(tasksContainer, task.getElement(), Position.BEFOREEND);
 };
 
 const renderTasks = () => {
