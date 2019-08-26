@@ -34,6 +34,15 @@ const renderTask = (taskMock) => {
   const taskEdit = new TaskEdit(taskMock);
   const tasksContainer = boardElement.querySelector(`.board__tasks`);
 
+  const getDefaultTasks = () => {
+    const taskElement = task.getElement();
+    const taskEditElement = document.querySelector(`.card--edit`);
+
+    if (taskEditElement) {
+      tasksContainer.replaceChild(taskElement, taskEditElement);
+    }
+  };
+
   const onEscKeyDown = (evt) => {
     if (evt.key === `Escape` || evt.key === `Esc`) {
       tasksContainer.replaceChild(task.getElement(), taskEdit.getElement());
@@ -44,6 +53,7 @@ const renderTask = (taskMock) => {
   task.getElement()
     .querySelector(`.card__btn--edit`)
     .addEventListener(`click`, () => {
+      getDefaultTasks();
       tasksContainer.replaceChild(taskEdit.getElement(), task.getElement());
       document.addEventListener(`keydown`, onEscKeyDown);
     });
@@ -87,12 +97,12 @@ loadButton.getElement().addEventListener(`click`, (event) => {
   renderTasks();
 });
 
-render(mainControl, menuElement, `beforeend`);
-render(main, searchElement, `beforeend`);
-render(main, filtersElement, `beforeend`);
-render(main, boardElement, `beforeend`);
-render(boardElement, sortElement, `afterbegin`);
-render(boardElement, loadButton.getElement(), `beforeend`);
+render(mainControl, menuElement, Position.BEFOREEND);
+render(main, searchElement, Position.BEFOREEND);
+render(main, filtersElement, Position.BEFOREEND);
+render(main, boardElement, Position.BEFOREEND);
+render(boardElement, sortElement, Position.AFTERBEGIN);
+render(boardElement, loadButton.getElement(), Position.BEFOREEND);
 
 renderTasks();
 
