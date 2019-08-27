@@ -28,22 +28,18 @@ const loadButton = new LoadButton();
 
 const main = document.querySelector(`.main`);
 const mainControl = document.querySelector(`.main__control`);
+let activeTask = null;
+let defaultTask = null;
 
 const renderTask = (taskMock) => {
   const task = new Task(taskMock);
   const taskEdit = new TaskEdit(taskMock);
   const tasksContainer = boardElement.querySelector(`.board__tasks`);
 
-  const getDefaultTasks = () => {
-    const taskElement = task.getElement();
-    const taskEditElement = document.querySelector(`.card--edit`);
-
-    if (taskEditElement) {
-      tasksContainer.replaceChild(taskElement, taskEditElement);
-    }
-  };
-
   const onEscKeyDown = (evt) => {
+    activeTask = null;
+    defaultTask = null;
+
     if (evt.key === `Escape` || evt.key === `Esc`) {
       tasksContainer.replaceChild(task.getElement(), taskEdit.getElement());
       document.removeEventListener(`keydown`, onEscKeyDown);
@@ -53,8 +49,14 @@ const renderTask = (taskMock) => {
   task.getElement()
     .querySelector(`.card__btn--edit`)
     .addEventListener(`click`, () => {
-      getDefaultTasks();
+
+      if (activeTask && defaultTask) {
+        tasksContainer.replaceChild(defaultTask, activeTask);
+      }
+
       tasksContainer.replaceChild(taskEdit.getElement(), task.getElement());
+      activeTask = taskEdit.getElement();
+      defaultTask = task.getElement();
       document.addEventListener(`keydown`, onEscKeyDown);
     });
 
@@ -71,6 +73,8 @@ const renderTask = (taskMock) => {
   taskEdit.getElement()
     .querySelector(`.card__save`)
     .addEventListener(`click`, () => {
+      activeTask = null;
+      defaultTask = null;
       tasksContainer.replaceChild(task.getElement(), taskEdit.getElement());
       document.removeEventListener(`keydown`, onEscKeyDown);
     });
