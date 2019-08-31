@@ -1,6 +1,6 @@
 import {createElement} from '../utils/render';
 
-class Board {
+class BoardTasks {
   constructor() {
     this._element = null;
   }
@@ -21,9 +21,9 @@ class Board {
 
   getTemplate() {
     return `
-      <section class="board container">
-      </section>`.trim();
+      <div class="board__tasks">
+      </div>`.trim();
   }
 }
 
-export default Board;
+export default BoardTasks;
