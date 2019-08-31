@@ -7,6 +7,7 @@ import Menu from './components/menu';
 import Search from './components/search';
 import Filters from './components/filters';
 import Board from './components/board';
+import BoardTasks from './components/board-tasks';
 import Sort from './components/sort';
 import TaskEdit from './components/task-edit';
 import Task from './components/task';
@@ -23,6 +24,7 @@ const filtersData = getFilters(tasksData);
 const menuElement = new Menu().getElement();
 const searchElement = new Search().getElement();
 const boardElement = new Board().getElement();
+const boardTasksElement = new BoardTasks().getElement();
 const filtersElement = new Filters(filtersData).getElement();
 const sortElement = new Sort().getElement();
 const loadButton = new LoadButton();
@@ -91,13 +93,15 @@ const renderTasks = () => {
     loadButton.removeElement();
   }
 
-  const boardTasks = document.createElement(`div`);
-  boardTasks.classList.add(`board__tasks`);
-  render(boardElement, boardTasks, Position.BEFOREEND);
+  render(boardElement, boardTasksElement, Position.BEFOREEND);
 
   tasksData
     .slice(page * COUNT_TASKS_LOAD, currentCountTasks)
     .forEach(renderTask);
+};
+
+const isShowTasks = () => {
+  return tasksData.length && tasksData.filter((task) => !task.isArchive).length;
 };
 
 loadButton.getElement().addEventListener(`click`, (event) => {
@@ -113,7 +117,7 @@ render(main, searchElement, Position.BEFOREEND);
 render(main, filtersElement, Position.BEFOREEND);
 render(main, boardElement, Position.BEFOREEND);
 
-if (tasksData.length && tasksData.filter((task) => !task.isArchive).length) {
+if (isShowTasks()) {
   renderTasks();
   render(boardElement, sortElement, Position.AFTERBEGIN);
   render(boardElement, loadButton.getElement(), Position.BEFOREEND);
