@@ -11,6 +11,7 @@ import Sort from './components/sort';
 import TaskEdit from './components/task-edit';
 import Task from './components/task';
 import LoadButton from './components/load-button';
+import NoTasks from './components/no-tasks';
 
 const COUNT_TASKS_LOAD = 8;
 let page = 0;
@@ -25,6 +26,7 @@ const boardElement = new Board().getElement();
 const filtersElement = new Filters(filtersData).getElement();
 const sortElement = new Sort().getElement();
 const loadButton = new LoadButton();
+const noTasks = new NoTasks();
 
 const main = document.querySelector(`.main`);
 const mainControl = document.querySelector(`.main__control`);
@@ -71,8 +73,9 @@ const renderTask = (taskMock) => {
     });
 
   taskEdit.getElement()
-    .querySelector(`.card__save`)
-    .addEventListener(`click`, () => {
+    .querySelector(`.card__form`)
+    .addEventListener(`submit`, (evt) => {
+      evt.preventDefault();
       activeTask = null;
       defaultTask = null;
       tasksContainer.replaceChild(task.getElement(), taskEdit.getElement());
@@ -87,6 +90,10 @@ const renderTasks = () => {
     removeElement(loadButton.getElement());
     loadButton.removeElement();
   }
+
+  const boardTasks = document.createElement(`div`);
+  boardTasks.classList.add(`board__tasks`);
+  render(boardElement, boardTasks, Position.BEFOREEND);
 
   tasksData
     .slice(page * COUNT_TASKS_LOAD, currentCountTasks)
@@ -105,8 +112,12 @@ render(mainControl, menuElement, Position.BEFOREEND);
 render(main, searchElement, Position.BEFOREEND);
 render(main, filtersElement, Position.BEFOREEND);
 render(main, boardElement, Position.BEFOREEND);
-render(boardElement, sortElement, Position.AFTERBEGIN);
-render(boardElement, loadButton.getElement(), Position.BEFOREEND);
 
-renderTasks();
+if (tasksData.length && tasksData.filter((task) => !task.isArchive).length) {
+  renderTasks();
+  render(boardElement, sortElement, Position.AFTERBEGIN);
+  render(boardElement, loadButton.getElement(), Position.BEFOREEND);
+} else {
+  render(boardElement, noTasks.getElement(), Position.BEFOREEND);
+}
 
