@@ -1,15 +1,15 @@
+import AbstractComponent from './abstract';
 import isRepeat from '../utils/isRepeat';
-import {createElement} from '../utils/render';
 
-class TaskEdit {
+class TaskEdit extends AbstractComponent {
   constructor({description, dueDate, tags, color, repeatingDays, isFavorite, isArchive}) {
+    super();
     this._description = description;
     this._dueDate = dueDate;
     this._tags = tags;
     this._color = color;
     this._isFavorite = isFavorite;
     this._isArchive = isArchive;
-    this._element = null;
     this._repeatingDays = repeatingDays;
 
     this._COLOURS = [
@@ -19,20 +19,6 @@ class TaskEdit {
       `green`,
       `pink`,
     ];
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    if (this._element) {
-      this._element = null;
-    }
   }
 
   getRepeatDateTemplate(day, checked) {
