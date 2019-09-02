@@ -1,22 +1,9 @@
-import {createElement} from '../utils/render';
+import AbstractComponent from './abstract';
 
-class Filters {
+class Filters extends AbstractComponent {
   constructor(filterList) {
+    super();
     this._filterList = filterList;
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    if (this._element) {
-      this._element = null;
-    }
   }
 
   getFilterTemplate({title, count}) {
