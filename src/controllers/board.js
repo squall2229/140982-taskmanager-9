@@ -54,6 +54,32 @@ class BoardController {
     this._tasks
         .slice(page * COUNT_TASKS_LOAD, currentCountTasks)
         .forEach(this._renderTask.bind(this));
+
+    this._sort.getElement().addEventListener(`click`, this._onSortLinkClick.bind(this));
+  }
+
+  _onSortLinkClick(evt) {
+    evt.preventDefault();
+
+    if (evt.target.tagName !== `A`) {
+      return;
+    }
+
+    this._board.getElement().innerHTML = ``;
+
+    switch (evt.target.dataset.sortType) {
+      case `date-up`:
+        const sortedByDateUpTasks = this._tasks.slice().sort((a, b) => a.dueDate - b.dueDate);
+        sortedByDateUpTasks.forEach((taskMock) => this._renderTask(taskMock));
+        break;
+      case `date-down`:
+        const sortedByDateDownTasks = this._tasks.slice().sort((a, b) => b.dueDate - a.dueDate);
+        sortedByDateDownTasks.forEach((taskMock) => this._renderTask(taskMock));
+        break;
+      case `default`:
+        this._tasks.forEach((taskMock) => this._renderTask(taskMock));
+        break;
+    }
   }
 
   _renderTask(taskMock) {
