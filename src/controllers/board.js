@@ -61,25 +61,32 @@ class BoardController {
   _onSortLinkClick(evt) {
     evt.preventDefault();
 
+    const sortByDateUp = () => {
+      const sortedByDateUpTasks = this._tasks.slice().sort((a, b) => a.dueDate - b.dueDate);
+      sortedByDateUpTasks.forEach((taskMock) => this._renderTask(taskMock));
+    };
+
+    const sortByDateDown = () => {
+      const sortedByDateDownTasks = this._tasks.slice().sort((a, b) => b.dueDate - a.dueDate);
+      sortedByDateDownTasks.forEach((taskMock) => this._renderTask(taskMock));
+    };
+
+    const sortByDefault = () => {
+      this._tasks.forEach((taskMock) => this._renderTask(taskMock));
+    };
+
+    const sortByType = {
+      up: sortByDateUp,
+      down: sortByDateDown,
+      default: sortByDefault
+    };
+
     if (evt.target.tagName !== `A`) {
       return;
     }
 
     this._board.getElement().innerHTML = ``;
-
-    switch (evt.target.dataset.sortType) {
-      case `date-up`:
-        const sortedByDateUpTasks = this._tasks.slice().sort((a, b) => a.dueDate - b.dueDate);
-        sortedByDateUpTasks.forEach((taskMock) => this._renderTask(taskMock));
-        break;
-      case `date-down`:
-        const sortedByDateDownTasks = this._tasks.slice().sort((a, b) => b.dueDate - a.dueDate);
-        sortedByDateDownTasks.forEach((taskMock) => this._renderTask(taskMock));
-        break;
-      case `default`:
-        this._tasks.forEach((taskMock) => this._renderTask(taskMock));
-        break;
-    }
+    sortByType[evt.target.dataset.sortType]();
   }
 
   _renderTask(taskMock) {
