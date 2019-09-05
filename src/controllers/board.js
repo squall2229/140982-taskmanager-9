@@ -1,16 +1,14 @@
 import BoardTasks from '../components/board-tasks';
 import Sort from '../components/sort';
-import Task from '../components/task';
-import TaskEdit from '../components/task-edit';
 import NoTasks from '../components/no-tasks';
 import LoadButton from '../components/load-button';
 import {render, removeElement, Position} from '../utils/render';
 
+import TaskController from './task';
+
 const COUNT_TASKS_LOAD = 8;
 let page = 0;
 let currentCountTasks = COUNT_TASKS_LOAD;
-let activeTask = null;
-let defaultTask = null;
 
 class BoardController {
   constructor(container, tasks) {
@@ -24,15 +22,18 @@ class BoardController {
 
   init() {
     if (this. _isShowTasks()) {
-      this._renderTasks();
+      render(this._container, this._board.getElement(), Position.BEFOREEND);
+      render(this._container, this._sort.getElement(), Position.AFTERBEGIN);
       render(this._container, this._loadButton.getElement(), Position.BEFOREEND);
+
+      this._renderTasks(this._tasks);
 
       this._loadButton.getElement().addEventListener(`click`, (event) => {
         event.preventDefault();
 
         page += 1;
         currentCountTasks += COUNT_TASKS_LOAD;
-        this._renderTasks();
+        this._renderTasks(this._tasks);
       });
 
     } else {
@@ -40,20 +41,19 @@ class BoardController {
     }
   }
 
-  _renderTasks() {
-    render(this._container, this._board.getElement(), Position.BEFOREEND);
-    render(this._container, this._sort.getElement(), Position.AFTERBEGIN);
+  _renderTasks(tasksData) {
+    // removeElement(this._board.getElement());
+    // this._board.removeElement();
+    // render(this._container, this._board.getElement(), Position.BEFOREEND);
 
-    if (currentCountTasks >= this._tasks.length) {
+    if (currentCountTasks >= tasksData.length || tasksData.length <= COUNT_TASKS_LOAD) {
       removeElement(this._loadButton.getElement());
       this._loadButton.removeElement();
     }
 
-    render(this._container, this._board.getElement(), Position.BEFOREEND);
-
-    this._tasks
-        .slice(page * COUNT_TASKS_LOAD, currentCountTasks)
-        .forEach(this._renderTask.bind(this));
+    tasksData
+      .slice(page * COUNT_TASKS_LOAD, currentCountTasks)
+      .forEach(this._renderTask.bind(this));
 
     this._sort.getElement().addEventListener(`click`, this._onSortLinkClick.bind(this));
   }
@@ -90,55 +90,12 @@ class BoardController {
   }
 
   _renderTask(taskMock) {
-    const task = new Task(taskMock);
-    const taskEdit = new TaskEdit(taskMock);
-    const tasksContainer = this._container.querySelector(`.board__tasks`);
+    const taskController = new TaskController(this._board, taskMock, this._onDataChange.bind(this));
+  }
 
-    const onEscKeyDown = (evt) => {
-      activeTask = null;
-      defaultTask = null;
-
-      if (evt.key === `Escape` || evt.key === `Esc`) {
-        tasksContainer.replaceChild(task.getElement(), taskEdit.getElement());
-        document.removeEventListener(`keydown`, onEscKeyDown);
-      }
-    };
-
-    task.getElement()
-      .querySelector(`.card__btn--edit`)
-      .addEventListener(`click`, () => {
-
-        if (activeTask && defaultTask) {
-          tasksContainer.replaceChild(defaultTask, activeTask);
-        }
-
-        tasksContainer.replaceChild(taskEdit.getElement(), task.getElement());
-        activeTask = taskEdit.getElement();
-        defaultTask = task.getElement();
-        document.addEventListener(`keydown`, onEscKeyDown);
-      });
-
-    taskEdit.getElement().querySelector(`textarea`)
-      .addEventListener(`focus`, () => {
-        document.removeEventListener(`keydown`, onEscKeyDown);
-      });
-
-    taskEdit.getElement().querySelector(`textarea`)
-      .addEventListener(`blur`, () => {
-        document.addEventListener(`keydown`, onEscKeyDown);
-      });
-
-    taskEdit.getElement()
-      .querySelector(`.card__form`)
-      .addEventListener(`submit`, (evt) => {
-        evt.preventDefault();
-        activeTask = null;
-        defaultTask = null;
-        tasksContainer.replaceChild(task.getElement(), taskEdit.getElement());
-        document.removeEventListener(`keydown`, onEscKeyDown);
-      });
-
-    render(this._board.getElement(), task.getElement(), Position.BEFOREEND);
+  _onDataChange(newData, oldData) {
+    this._tasks[this._tasks.findIndex((it) => it === oldData)] = newData;
+    this._renderTasks(this._tasks);
   }
 
   _isShowTasks() {
