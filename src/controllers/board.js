@@ -7,7 +7,6 @@ import {render, removeElement, Position} from '../utils/render';
 import TaskController from './task';
 
 const COUNT_TASKS_LOAD = 8;
-let page = 0;
 let currentCountTasks = COUNT_TASKS_LOAD;
 
 class BoardController {
@@ -22,16 +21,13 @@ class BoardController {
 
   init() {
     if (this. _isShowTasks()) {
-      render(this._container, this._board.getElement(), Position.BEFOREEND);
-      render(this._container, this._sort.getElement(), Position.AFTERBEGIN);
-      render(this._container, this._loadButton.getElement(), Position.BEFOREEND);
+      render(this._container, this._sort.getElement(), Position.BEFOREEND);
 
       this._renderTasks(this._tasks);
 
       this._loadButton.getElement().addEventListener(`click`, (event) => {
         event.preventDefault();
 
-        page += 1;
         currentCountTasks += COUNT_TASKS_LOAD;
         this._renderTasks(this._tasks);
       });
@@ -42,9 +38,11 @@ class BoardController {
   }
 
   _renderTasks(tasksData) {
-    // removeElement(this._board.getElement());
-    // this._board.removeElement();
-    // render(this._container, this._board.getElement(), Position.BEFOREEND);
+    removeElement(this._board.getElement());
+    this._board.removeElement();
+
+    render(this._container, this._board.getElement(), Position.BEFOREEND);
+    render(this._container, this._loadButton.getElement(), Position.BEFOREEND);
 
     if (currentCountTasks >= tasksData.length || tasksData.length <= COUNT_TASKS_LOAD) {
       removeElement(this._loadButton.getElement());
@@ -52,7 +50,7 @@ class BoardController {
     }
 
     tasksData
-      .slice(page * COUNT_TASKS_LOAD, currentCountTasks)
+      .slice(0, currentCountTasks)
       .forEach(this._renderTask.bind(this));
 
     this._sort.getElement().addEventListener(`click`, this._onSortLinkClick.bind(this));
