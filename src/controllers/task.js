@@ -154,7 +154,9 @@ class TaskController {
 
         if (element.classList.contains(`card__repeat-status--active`)) {
           element.textContent = `no`;
-          Array.from(fields).forEach((field) => field.checked = false);
+          Array.from(fields).forEach((field) => {
+            field.checked = false;
+          });
         } else {
           element.textContent = `yes`;
         }
