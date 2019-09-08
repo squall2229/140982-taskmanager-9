@@ -17,6 +17,8 @@ class BoardController {
     this._noTasks = new NoTasks();
     this._sort = new Sort();
     this._loadButton = new LoadButton();
+
+    this._subscriptions = [];
   }
 
   init() {
@@ -88,7 +90,12 @@ class BoardController {
   }
 
   _renderTask(taskMock) {
-    const taskController = new TaskController(this._board, taskMock, this._onDataChange.bind(this));
+    const taskController = new TaskController(this._board, taskMock, this._onDataChange.bind(this), this._onChangeView.bind(this));
+    this._subscriptions.push(taskController.setDefaultView.bind(taskController));
+  }
+
+  _onChangeView() {
+    this._subscriptions.forEach((it) => it());
   }
 
   _onDataChange(newData, oldData) {
