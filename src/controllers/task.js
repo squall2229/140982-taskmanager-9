@@ -1,4 +1,5 @@
 import {render, Position, removeElement, createElement} from '../utils/render';
+import isPressKeyExit from '../utils/isPressKeyExit';
 import getFormData from '../utils/getFormData';
 import Task from '../components/task';
 import TaskEdit from '../components/task-edit';
@@ -14,11 +15,19 @@ class TaskController {
     this._onChangeView = onChangeView;
 
     this.init();
+
+    this._COLORS = [
+      `black`,
+      `yellow`,
+      `blue`,
+      `green`,
+      `pink`,
+    ];
   }
 
   init() {
     const onEscKeyDown = (evt) => {
-      if (evt.key === `Escape` || evt.key === `Esc`) {
+      if (isPressKeyExit(evt)) {
         this._container.getElement().replaceChild(this._taskView.getElement(), this._taskEdit.getElement());
         document.removeEventListener(`keydown`, onEscKeyDown);
       }
@@ -47,20 +56,11 @@ class TaskController {
     };
 
     const addListenersCheckboxesColor = () => {
-      const checkboxesColor = this._taskEdit.getElement()
-      .querySelectorAll(`.card__color-input`);
-
-      const COLORS = [
-        `black`,
-        `yellow`,
-        `blue`,
-        `green`,
-        `pink`,
-      ];
+      const checkboxesColor = this._taskEdit.getElement().querySelectorAll(`.card__color-input`);
 
       Array.from(checkboxesColor).forEach((checkbox) => {
         checkbox.addEventListener(`change`, (evt) => {
-          COLORS.forEach((color) => this._taskEdit.getElement().classList.remove(`card--${color}`));
+          this._COLORS.forEach((color) => this._taskEdit.getElement().classList.remove(`card--${color}`));
           this._taskEdit.getElement().classList.add(`card--${evt.target.value}`);
         });
       });
