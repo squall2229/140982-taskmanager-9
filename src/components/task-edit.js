@@ -108,10 +108,10 @@ class TaskEdit extends AbstractComponent {
             <div class="card__details">
               <div class="card__dates">
                 <button class="card__date-deadline-toggle" type="button">
-                  date: <span class="card__date-status">yes</span>
+                  date: <span class="card__date-status">${this._dueDate ? `yes` : `no`}</span>
                 </button>
 
-                <fieldset class="card__date-deadline">
+                ${this._dueDate ? `<fieldset class="card__date-deadline">
                   <label class="card__input-deadline-wrap">
                     <input
                       class="card__date"
@@ -121,17 +121,19 @@ class TaskEdit extends AbstractComponent {
                       value="${this._dueDate.toDateString()}"
                     />
                   </label>
-                </fieldset>
+                </fieldset>` : ``}
 
                 <button class="card__repeat-toggle" type="button">
-                  repeat:<span class="card__repeat-status">yes</span>
+                  repeat:<span class="card__repeat-status ${isRepeat(this._repeatingDays) ? `` : `card__repeat-status--active`}">
+                    ${isRepeat(this._repeatingDays) ? `yes` : `no`}
+                  </span>
                 </button>
 
-                <fieldset class="card__repeat-days">
+              <fieldset class="card__repeat-days ${isRepeat(this._repeatingDays) ? `` : `visually-hidden`}">
                   <div class="card__repeat-days-inner">
                     ${Object.keys(this._repeatingDays).map((day) => this.getRepeatDateTemplate(day, this._repeatingDays[day])).join(``)}
                   </div>
-                </fieldset>
+              </fieldset>
               </div>
 
               <div class="card__hashtag">

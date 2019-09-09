@@ -10,7 +10,9 @@ export const createElement = (template) => {
 };
 
 export const removeElement = (element) => {
-  element.remove();
+  if (element) {
+    element.remove();
+  }
 };
 
 export const render = (container, element, place) => {
