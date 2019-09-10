@@ -1,3 +1,5 @@
+import moment from 'moment';
+import 'flatpickr/dist/flatpickr.min.css';
 import AbstractComponent from './abstract';
 import isRepeat from '../utils/isRepeat';
 
@@ -118,7 +120,7 @@ class TaskEdit extends AbstractComponent {
                       type="text"
                       placeholder=""
                       name="date"
-                      value="${this._dueDate.toDateString()}"
+                      value="${moment(this._dueDate).format(`DD MMMM, h:mm`)}"
                     />
                   </label>
                 </fieldset>` : ``}

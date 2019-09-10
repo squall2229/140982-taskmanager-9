@@ -1,3 +1,4 @@
+import flatpickr from 'flatpickr';
 import {render, Position, removeElement, createElement} from '../utils/render';
 import isPressKeyExit from '../utils/isPressKeyExit';
 import getFormData from '../utils/getFormData';
@@ -54,6 +55,13 @@ class TaskController {
         document.removeEventListener(`keydown`, onEnterDown);
       }
     };
+
+    flatpickr(this._taskEdit.getElement().querySelector(`.card__date`), {
+      altInput: true,
+      allowInput: true,
+      dateFormat: `d F h:i K`,
+      defaultDate: this._data.dueDate
+    });
 
     const addListenersCheckboxesColor = () => {
       const checkboxesColor = this._taskEdit.getElement().querySelectorAll(`.card__color-input`);
