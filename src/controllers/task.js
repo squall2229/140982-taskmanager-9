@@ -56,13 +56,6 @@ class TaskController {
       }
     };
 
-    flatpickr(this._taskEdit.getElement().querySelector(`.card__date`), {
-      altInput: true,
-      allowInput: true,
-      dateFormat: `d F h:i K`,
-      defaultDate: this._data.dueDate
-    });
-
     const addListenersCheckboxesColor = () => {
       const checkboxesColor = this._taskEdit.getElement().querySelectorAll(`.card__color-input`);
 
@@ -182,6 +175,13 @@ class TaskController {
 
     addListenersCheckboxesColor();
     addListenersHashTags();
+
+    flatpickr(this._taskEdit.getElement().querySelector(`.card__date`), {
+      altInput: true,
+      allowInput: true,
+      dateFormat: `d F h:i K`,
+      defaultDate: this._data.dueDate
+    });
 
     render(this._container.getElement(), this._taskView.getElement(), Position.AFTERBEGIN);
   }
