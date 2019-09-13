@@ -30,6 +30,7 @@ class TaskController {
     const onEscKeyDown = (evt) => {
       if (isPressKeyExit(evt)) {
         this._container.getElement().replaceChild(this._taskView.getElement(), this._taskEdit.getElement());
+
         document.removeEventListener(`keydown`, onEscKeyDown);
       }
     };
@@ -171,6 +172,11 @@ class TaskController {
         const entry = Object.assign({}, this._data, {isArchive: true});
 
         this._onDataChange(entry, this._data);
+      });
+
+    this._taskEdit.getElement().querySelector(`.card__delete`)
+      .addEventListener(`click`, () => {
+        this._onDataChange(null, this._data);
       });
 
     addListenersCheckboxesColor();

@@ -39,6 +39,14 @@ class BoardController {
     }
   }
 
+  hide() {
+    this._board.getElement().classList.add(`visually-hidden`);
+  }
+
+  show() {
+    this._board.getElement().classList.remove(`visually-hidden`);
+  }
+
   _renderTasks(tasksData) {
     removeElement(this._board.getElement());
     this._board.removeElement();
@@ -99,7 +107,14 @@ class BoardController {
   }
 
   _onDataChange(newData, oldData) {
-    this._tasks[this._tasks.findIndex((it) => it === oldData)] = newData;
+    const index = this._tasks.findIndex((it) => it === oldData);
+
+    if (newData === null) {
+      this._tasks = [...this._tasks.slice(0, index), ...this._tasks.slice(index + 1)];
+    } else {
+      this._tasks[index] = newData;
+    }
+
     this._renderTasks(this._tasks);
   }
 
