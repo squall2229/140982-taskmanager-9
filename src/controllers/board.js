@@ -19,6 +19,8 @@ class BoardController {
     this._sort = new Sort();
     this._loadButton = new LoadButton();
 
+    this._creatingTask = null;
+
     this._subscriptions = [];
   }
 
@@ -49,6 +51,10 @@ class BoardController {
   }
 
   createTask() {
+    if (this._creatingTask) {
+      return;
+    }
+
     const defaultTask = {
       description: ``,
       dueDate: new Date(),
@@ -59,7 +65,7 @@ class BoardController {
       isArchive: false,
     };
 
-    const taskController = new TaskController(this._board, defaultTask, TaskControllerMode.ADDING, this._onDataChange.bind(this), this._onChangeView.bind(this));
+    this._creatingTask = new TaskController(this._board, defaultTask, TaskControllerMode.ADDING, this._onDataChange.bind(this), this._onChangeView.bind(this));
   }
 
   _renderTasks(tasksData) {
@@ -128,6 +134,7 @@ class BoardController {
     if (newData === null) {
       this._tasks = [...this._tasks.slice(0, index), ...this._tasks.slice(index + 1)];
     } else if (oldData === null) {
+      this._creatingTask = null;
       this._tasks = [newData, ...this._tasks];
     } else {
       this._tasks[index] = newData;

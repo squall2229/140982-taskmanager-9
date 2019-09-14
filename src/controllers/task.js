@@ -212,8 +212,18 @@ class TaskController {
   }
 
   setDefaultView() {
+    const newTaskElement = this._container.getElement().querySelector(`.card--edit`);
+
+    const changeTask = (newElement, oldElement) => {
+      this._container.getElement().replaceChild(newElement, oldElement);
+    };
+
+    if (newTaskElement) {
+      changeTask(this._taskView.getElement(), newTaskElement);
+    }
+
     if (this._container.getElement().contains(this._taskEdit.getElement())) {
-      this._container.getElement().replaceChild(this._taskView.getElement(), this._taskEdit.getElement());
+      changeTask(this._taskView.getElement(), this._taskEdit.getElement());
     }
   }
 }
