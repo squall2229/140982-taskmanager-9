@@ -31,8 +31,8 @@ render(main, filtersElement, Position.BEFOREEND);
 render(main, boardElement, Position.BEFOREEND);
 render(main, statistic.getElement(), Position.BEFOREEND);
 
-const boardController = new BoardController(boardElement, tasksData);
-boardController.init();
+const boardController = new BoardController(boardElement);
+boardController.show(tasksData);
 
 menuElement.addEventListener(`change`, (evt) => {
   evt.preventDefault();
@@ -43,7 +43,7 @@ menuElement.addEventListener(`change`, (evt) => {
 
   const showStatistic = () => {
     statistic.getElement().classList.add(`visually-hidden`);
-    boardController.show();
+    boardController.show(tasksData);
   };
 
   const hideStatistic = () => {
