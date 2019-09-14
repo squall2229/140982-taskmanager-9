@@ -4,10 +4,11 @@ import NoTasks from '../components/no-tasks';
 import LoadButton from '../components/load-button';
 import {render, removeElement, Position} from '../utils/render';
 
-import TaskController from './task';
+import TaskController, {Mode} from './task';
 
 const COUNT_TASKS_LOAD = 8;
 let currentCountTasks = COUNT_TASKS_LOAD;
+const TaskControllerMode = Mode;
 
 class BoardController {
   constructor(container, tasks) {
@@ -45,6 +46,20 @@ class BoardController {
 
   show() {
     this._board.getElement().classList.remove(`visually-hidden`);
+  }
+
+  createTask() {
+    const defaultTask = {
+      description: ``,
+      dueDate: new Date(),
+      tags: new Set(),
+      color: [],
+      repeatingDays: {},
+      isFavorite: false,
+      isArchive: false,
+    };
+
+    const taskController = new TaskController(this._board, defaultTask, TaskControllerMode.ADDING, this._onDataChange.bind(this), this._onChangeView.bind(this));
   }
 
   _renderTasks(tasksData) {
@@ -98,7 +113,7 @@ class BoardController {
   }
 
   _renderTask(taskMock) {
-    const taskController = new TaskController(this._board, taskMock, this._onDataChange.bind(this), this._onChangeView.bind(this));
+    const taskController = new TaskController(this._board, taskMock, TaskControllerMode.DEFAULT, this._onDataChange.bind(this), this._onChangeView.bind(this));
     this._subscriptions.push(taskController.setDefaultView.bind(taskController));
   }
 
@@ -107,10 +122,13 @@ class BoardController {
   }
 
   _onDataChange(newData, oldData) {
+
     const index = this._tasks.findIndex((it) => it === oldData);
 
     if (newData === null) {
       this._tasks = [...this._tasks.slice(0, index), ...this._tasks.slice(index + 1)];
+    } else if (oldData === null) {
+      this._tasks = [newData, ...this._tasks];
     } else {
       this._tasks[index] = newData;
     }
