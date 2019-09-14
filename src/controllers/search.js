@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 import {render, removeElement, Position} from '../utils/render';
 
 import TaskListController from './task-list';
@@ -67,10 +69,18 @@ class SearchController {
     };
 
     const isHasDate = (task, value) => {
-      return (
-        task.dueDate.getDate() === new Date(value).getDate() ||
-        task.dueDate.getMonth() === new Date(value).getMonth()
-      );
+      const taskDate = moment(task.dueDate);
+      const values = value.toLowerCase().replace(`d`, ``).split(`.`);
+      let inputDate = ``;
+
+      const isFullValues = () => values.filter((el) => el).length === 3;
+
+      if (isFullValues()) {
+        inputDate = moment(`${values[1]}, ${values[0]}, ${values[2]}`);
+        return taskDate.format(`DD-MM-YYYY`) === inputDate.format(`DD-MM-YYYY`);
+      }
+
+      return false;
     };
 
     render(this._container, this._searchResult.getElement(), Position.BEFOREEND);
