@@ -43,11 +43,11 @@ class TaskController {
     const onEscKeyDown = (evt) => {
       if (isPressKeyExit(evt)) {
         if (mode === Mode.DEFAULT) {
-          if (this._container.getElement().contains(this._taskEdit.getElement())) {
-            this._container.getElement().replaceChild(this._taskView.getElement(), this._taskEdit.getElement());
+          if (this._container.contains(this._taskEdit.getElement())) {
+            this._container.replaceChild(this._taskView.getElement(), this._taskEdit.getElement());
           }
         } else if (mode === Mode.ADDING) {
-          this._container.getElement().removeChild(currentView.getElement());
+          this._container.removeChild(currentView.getElement());
         }
 
         document.removeEventListener(`keydown`, onEscKeyDown);
@@ -115,7 +115,7 @@ class TaskController {
         evt.preventDefault();
 
         this._onChangeView();
-        this._container.getElement().replaceChild(this._taskEdit.getElement(), this._taskView.getElement());
+        this._container.replaceChild(this._taskEdit.getElement(), this._taskView.getElement());
         document.addEventListener(`keydown`, onEscKeyDown);
       });
 
@@ -208,21 +208,21 @@ class TaskController {
       defaultDate: this._data.dueDate
     });
 
-    render(this._container.getElement(), currentView.getElement(), renderPosition);
+    render(this._container, currentView.getElement(), renderPosition);
   }
 
   setDefaultView() {
-    const newTaskElement = this._container.getElement().querySelector(`.card--edit`);
+    const newTaskElement = this._container.querySelector(`.card--edit`);
 
     const changeTask = (newElement, oldElement) => {
-      this._container.getElement().replaceChild(newElement, oldElement);
+      this._container.replaceChild(newElement, oldElement);
     };
 
     if (newTaskElement) {
       changeTask(this._taskView.getElement(), newTaskElement);
     }
 
-    if (this._container.getElement().contains(this._taskEdit.getElement())) {
+    if (this._container.contains(this._taskEdit.getElement())) {
       changeTask(this._taskView.getElement(), this._taskEdit.getElement());
     }
   }

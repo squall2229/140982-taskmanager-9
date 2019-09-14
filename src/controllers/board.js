@@ -18,18 +18,7 @@ class BoardController {
     this._sort = new Sort();
     this._loadButton = new LoadButton();
 
-    this._taskListController = new TaskListController(this._board, this._onDataChange.bind(this));
-    this._init();
-  }
-
-  _init() {
-    if (this._isShowTasks()) {
-      render(this._container, this._sort.getElement(), Position.BEFOREEND);
-      this._renderTasks();
-      this._sort.getElement().addEventListener(`click`, this._onSortLinkClick.bind(this));
-    } else {
-      render(this._container, this._noTasks.getElement(), Position.BEFOREEND);
-    }
+    this._taskListController = new TaskListController(this._board.getElement(), this._onDataChange.bind(this));
   }
 
   createTask() {
@@ -38,6 +27,8 @@ class BoardController {
 
   hide() {
     this._board.getElement().classList.add(`visually-hidden`);
+    this._loadButton.getElement().classList.add(`visually-hidden`);
+    this._sort.getElement().classList.add(`visually-hidden`);
   }
 
   show(tasksData) {
@@ -46,17 +37,22 @@ class BoardController {
     }
 
     this._board.getElement().classList.remove(`visually-hidden`);
+    this._loadButton.getElement().classList.remove(`visually-hidden`);
+    this._sort.getElement().classList.remove(`visually-hidden`);
   }
 
   _setTasks(tasksData) {
     this._tasks = tasksData;
-    this._renderTasks();
+
+    if (this._tasks.length) {
+      this._renderTasks();
+    } else {
+      render(this._container, this._noTasks.getElement(), Position.BEFOREEND);
+    }
   }
 
   _renderTasks() {
-    removeElement(this._board.getElement());
-    this._board.removeElement();
-
+    render(this._container, this._sort.getElement(), Position.BEFOREEND);
     render(this._container, this._board.getElement(), Position.BEFOREEND);
     render(this._container, this._loadButton.getElement(), Position.BEFOREEND);
 
@@ -66,6 +62,8 @@ class BoardController {
       currentCountTasks += COUNT_TASKS_LOAD;
       this._renderTasks();
     });
+
+    this._sort.getElement().addEventListener(`click`, this._onSortLinkClick.bind(this));
 
     if (currentCountTasks >= this._tasks.length || this._tasks.length <= COUNT_TASKS_LOAD) {
       removeElement(this._loadButton.getElement());
@@ -80,16 +78,16 @@ class BoardController {
 
     const sortByDateUp = () => {
       const sortedByDateUpTasks = this._tasks.slice().sort((a, b) => a.dueDate - b.dueDate);
-      sortedByDateUpTasks.forEach((taskMock) => this._renderTask(taskMock));
+      this._taskListController.setTasks(sortedByDateUpTasks);
     };
 
     const sortByDateDown = () => {
       const sortedByDateDownTasks = this._tasks.slice().sort((a, b) => b.dueDate - a.dueDate);
-      sortedByDateDownTasks.forEach((taskMock) => this._renderTask(taskMock));
+      this._taskListController.setTasks(sortedByDateDownTasks);
     };
 
     const sortByDefault = () => {
-      this._tasks.forEach((taskMock) => this._renderTask(taskMock));
+      this._taskListController.setTasks(this._tasks);
     };
 
     const sortByType = {
@@ -102,18 +100,14 @@ class BoardController {
       return;
     }
 
-    this._board.getElement().innerHTML = ``;
     sortByType[evt.target.dataset.sortType]();
   }
 
   _onDataChange(tasks) {
-    this._tasks = [...tasks, ...this._tasks.slice(0, currentCountTasks)];
+    this._tasks = [...tasks, ...this._tasks.slice(currentCountTasks)];
     this._renderTasks();
   }
 
-  _isShowTasks() {
-    return this._tasks.length && this._tasks.filter((task) => !task.isArchive).length;
-  }
 }
 
 export default BoardController;

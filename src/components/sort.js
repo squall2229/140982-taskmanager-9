@@ -1,10 +1,6 @@
 import AbstractComponent from './abstract';
 
 class Sort extends AbstractComponent {
-  constructor() {
-    super();
-  }
-
   getTemplate() {
     return `
       <div class="board__filter-list">

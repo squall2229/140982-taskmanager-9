@@ -10,31 +10,40 @@ import Board from './components/board';
 import Statistic from './components/statistic';
 
 import BoardController from './controllers/board';
+import SearchController from './controllers/search';
 
 const tasksData = getTasks();
 const filtersData = getFilters(tasksData);
 
-const menuElement = new Menu().getElement();
-const searchElement = new Search().getElement();
-const boardElement = new Board().getElement();
+const menu = new Menu();
+const search = new Search();
+const board = new Board();
 const statistic = new Statistic();
-const filtersElement = new Filters(filtersData).getElement();
+const filters = new Filters(filtersData);
 
 const main = document.querySelector(`.main`);
 const mainControl = document.querySelector(`.main__control`);
+const boardController = new BoardController(board.getElement());
+
+const onSearchBackButtonClick = () => {
+  statistic.getElement().classList.add(`visually-hidden`);
+  searchController.hide();
+  boardController.show(tasksData);
+};
 
 statistic.getElement().classList.add(`visually-hidden`);
 
-render(mainControl, menuElement, Position.BEFOREEND);
-render(main, searchElement, Position.BEFOREEND);
-render(main, filtersElement, Position.BEFOREEND);
-render(main, boardElement, Position.BEFOREEND);
+render(mainControl, menu.getElement(), Position.BEFOREEND);
+render(main, search.getElement(), Position.BEFOREEND);
+render(main, filters.getElement(), Position.BEFOREEND);
+render(main, board.getElement(), Position.BEFOREEND);
 render(main, statistic.getElement(), Position.BEFOREEND);
 
-const boardController = new BoardController(boardElement);
 boardController.show(tasksData);
 
-menuElement.addEventListener(`change`, (evt) => {
+const searchController = new SearchController(main, search, onSearchBackButtonClick);
+
+menu.getElement().addEventListener(`change`, (evt) => {
   evt.preventDefault();
 
   if (evt.target.tagName !== `INPUT`) {
@@ -53,7 +62,7 @@ menuElement.addEventListener(`change`, (evt) => {
 
   const createTask = () => {
     boardController.createTask();
-    menuElement.querySelector(`#control__task`).checked = true;
+    menu.getElement().querySelector(`#control__task`).checked = true;
   };
 
   const actionById = {
@@ -63,6 +72,12 @@ menuElement.addEventListener(`change`, (evt) => {
   };
 
   actionById[evt.target.id]();
+});
+
+search.getElement().addEventListener(`click`, () => {
+  statistic.getElement().classList.add(`visually-hidden`);
+  boardController.hide();
+  searchController.show(tasksData);
 });
 
 
