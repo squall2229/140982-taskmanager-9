@@ -9,9 +9,10 @@ class SearchResultInfo extends AbstractComponent {
   }
 
   getTemplate() {
-    return `<h2 class="result__title">
-      ${this._title}<span class="result__count">${this._count}</span>
-    </h2>`;
+    return `
+      <h2 class="result__title">
+        ${this._title}<span class="result__count">${this._count}</span>
+      </h2>`.trim();
   }
 }
 

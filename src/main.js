@@ -31,7 +31,28 @@ const onSearchBackButtonClick = () => {
   boardController.show(tasksData);
 };
 
-statistic.getElement().classList.add(`visually-hidden`);
+const showStatistic = () => {
+  statistic.getElement().classList.add(`visually-hidden`);
+  boardController.show(tasksData);
+};
+
+const hideStatistic = () => {
+  boardController.hide();
+  statistic.getElement().classList.remove(`visually-hidden`);
+};
+
+const createTask = () => {
+  boardController.createTask();
+  menu.getElement().querySelector(`#control__task`).checked = true;
+};
+
+const actionById = {
+  'control__task': showStatistic,
+  'control__statistic': hideStatistic,
+  'control__new-task': createTask
+};
+
+const searchController = new SearchController(main, search, onSearchBackButtonClick);
 
 render(mainControl, menu.getElement(), Position.BEFOREEND);
 render(main, search.getElement(), Position.BEFOREEND);
@@ -39,9 +60,8 @@ render(main, filters.getElement(), Position.BEFOREEND);
 render(main, board.getElement(), Position.BEFOREEND);
 render(main, statistic.getElement(), Position.BEFOREEND);
 
+statistic.getElement().classList.add(`visually-hidden`);
 boardController.show(tasksData);
-
-const searchController = new SearchController(main, search, onSearchBackButtonClick);
 
 menu.getElement().addEventListener(`change`, (evt) => {
   evt.preventDefault();
@@ -49,27 +69,6 @@ menu.getElement().addEventListener(`change`, (evt) => {
   if (evt.target.tagName !== `INPUT`) {
     return;
   }
-
-  const showStatistic = () => {
-    statistic.getElement().classList.add(`visually-hidden`);
-    boardController.show(tasksData);
-  };
-
-  const hideStatistic = () => {
-    boardController.hide();
-    statistic.getElement().classList.remove(`visually-hidden`);
-  };
-
-  const createTask = () => {
-    boardController.createTask();
-    menu.getElement().querySelector(`#control__task`).checked = true;
-  };
-
-  const actionById = {
-    'control__task': showStatistic,
-    'control__statistic': hideStatistic,
-    'control__new-task': createTask
-  };
 
   actionById[evt.target.id]();
 });
