@@ -11,6 +11,7 @@ import Statistic from './components/statistic';
 
 import BoardController from './controllers/board';
 import SearchController from './controllers/search';
+import StatisticController from './controllers/statistic';
 
 const tasksData = getTasks();
 const filtersData = getFilters(tasksData);
@@ -32,13 +33,13 @@ const onSearchBackButtonClick = () => {
 };
 
 const showStatistic = () => {
-  statistic.getElement().classList.add(`visually-hidden`);
+  statisticController.hide();
   boardController.show(tasksData);
 };
 
 const hideStatistic = () => {
   boardController.hide();
-  statistic.getElement().classList.remove(`visually-hidden`);
+  statisticController.show();
 };
 
 const createTask = () => {
@@ -53,14 +54,13 @@ const actionById = {
 };
 
 const searchController = new SearchController(main, search, onSearchBackButtonClick);
+const statisticController = new StatisticController(main, tasksData);
 
 render(mainControl, menu.getElement(), Position.BEFOREEND);
 render(main, search.getElement(), Position.BEFOREEND);
 render(main, filters.getElement(), Position.BEFOREEND);
 render(main, board.getElement(), Position.BEFOREEND);
-render(main, statistic.getElement(), Position.BEFOREEND);
-
-statistic.getElement().classList.add(`visually-hidden`);
+statisticController.init();
 boardController.show(tasksData);
 
 menu.getElement().addEventListener(`change`, (evt) => {
@@ -74,7 +74,7 @@ menu.getElement().addEventListener(`change`, (evt) => {
 });
 
 search.getElement().addEventListener(`click`, () => {
-  statistic.getElement().classList.add(`visually-hidden`);
+  statisticController.hide();
   boardController.hide();
   searchController.show(tasksData);
 });

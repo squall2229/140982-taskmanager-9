@@ -23,3 +23,12 @@ export const isHasDate = (task, value) => {
 
   return false;
 };
+
+export const groupBy = (arr, prop) => {
+  return arr.reduce((groups, item) => {
+    let val = item[prop];
+    groups[val] = groups[val] || [];
+    groups[val].push(item);
+    return groups;
+  }, {});
+};
