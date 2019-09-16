@@ -32,3 +32,20 @@ export const groupBy = (arr, prop) => {
     return groups;
   }, {});
 };
+
+export const flatten = (arr) => arr.reduce((flat, toFlatten) => {
+  return flat.concat(Array.isArray(toFlatten) ? flatten(toFlatten) : toFlatten);
+}, []);
+
+export const resultReduce = (arr) => arr.reduce(function (acc, cur) {
+  if (!acc.hash[cur]) {
+    acc.hash[cur] = {[cur]: 1};
+    acc.result.push(acc.hash[cur]);
+  } else {
+    acc.hash[cur][cur] += 1;
+  }
+  return acc;
+}, {
+  hash: {},
+  result: []
+});

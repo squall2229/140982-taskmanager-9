@@ -1,8 +1,10 @@
 import flatpickr from 'flatpickr';
 import moment from 'moment';
 import {render, Position} from '../utils/render';
+
 import Statistic from '../components/statistic';
 import drawDaysChart from '../components/days-chart';
+import drawTagsChart from '../components/tags-chart';
 
 const WEEK_DAYS = 7;
 
@@ -18,8 +20,10 @@ class StatisticController {
 
     render(this._container, this._statisticView.getElement(), Position.BEFOREEND);
 
-    const inputDate = this._container.querySelector(`.statistic__period-input`);
+    const completeTasks = this._data.filter((task) => task.isArchive);
     const daysCtx = this._container.querySelector(`.statistic__days`);
+    const tagsCtx = this._container.querySelector(`.statistic__tags`);
+    const inputDate = this._container.querySelector(`.statistic__period-input`);
     const defaultDate = this._getDefaultDate();
 
     flatpickr(inputDate, {
@@ -29,11 +33,12 @@ class StatisticController {
       dateFormat: `d F h:i K`,
       defaultDate,
       onChange: (value) => {
-        drawDaysChart(daysCtx, value[0], value[1], this._data);
+        drawDaysChart(daysCtx, value[0], value[1], completeTasks);
       }
     });
 
-    drawDaysChart(daysCtx, defaultDate[0], defaultDate[1], this._data);
+    drawDaysChart(daysCtx, defaultDate[0], defaultDate[1], completeTasks);
+    drawTagsChart(tagsCtx, this._data);
   }
 
   show() {
