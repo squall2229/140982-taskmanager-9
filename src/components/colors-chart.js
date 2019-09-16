@@ -1,17 +1,16 @@
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import {flatten, resultReduce} from '../utils/tasks';
-import {getRandomColor} from '../utils/random';
 
-const drawTagsChart = (container, taskData) => {
+const drawColorsChart = (container, tasksData) => {
   let labelsTitle = [];
   let labelsCount = [];
-  const labelsAll = flatten(taskData.map((task) => Array.from(task.tags)));
+  const labelsAll = flatten(tasksData.map((task) => task.color));
   const {result} = resultReduce(labelsAll);
 
   result.forEach((item) => {
     const key = Object.keys(item)[0];
-    labelsTitle.push(`#${key}`);
+    labelsTitle.push(key);
     labelsCount.push(item[key]);
   });
 
@@ -22,7 +21,7 @@ const drawTagsChart = (container, taskData) => {
       labels: labelsTitle,
       datasets: [{
         data: labelsCount,
-        backgroundColor: labelsTitle.map(() => getRandomColor())
+        backgroundColor: labelsTitle
       }]
     },
     options: {
@@ -52,7 +51,7 @@ const drawTagsChart = (container, taskData) => {
       },
       title: {
         display: true,
-        text: `DONE BY: TAGS`,
+        text: `DONE BY: COLORS`,
         fontSize: 16,
         fontColor: `#000000`
       },
@@ -70,4 +69,4 @@ const drawTagsChart = (container, taskData) => {
   });
 };
 
-export default drawTagsChart;
+export default drawColorsChart;

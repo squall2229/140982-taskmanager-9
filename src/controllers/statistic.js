@@ -5,6 +5,7 @@ import {render, Position} from '../utils/render';
 import Statistic from '../components/statistic';
 import drawDaysChart from '../components/days-chart';
 import drawTagsChart from '../components/tags-chart';
+import drawColorsChart from '../components/colors-chart';
 
 const WEEK_DAYS = 7;
 
@@ -23,6 +24,7 @@ class StatisticController {
     const completeTasks = this._data.filter((task) => task.isArchive);
     const daysCtx = this._container.querySelector(`.statistic__days`);
     const tagsCtx = this._container.querySelector(`.statistic__tags`);
+    const colorsCtx = this._container.querySelector(`.statistic__colors`);
     const inputDate = this._container.querySelector(`.statistic__period-input`);
     const defaultDate = this._getDefaultDate();
 
@@ -39,6 +41,7 @@ class StatisticController {
 
     drawDaysChart(daysCtx, defaultDate[0], defaultDate[1], completeTasks);
     drawTagsChart(tagsCtx, this._data);
+    drawColorsChart(colorsCtx, this._data);
   }
 
   show() {
