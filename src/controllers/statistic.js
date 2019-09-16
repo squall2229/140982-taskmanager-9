@@ -21,12 +21,10 @@ class StatisticController {
 
     render(this._container, this._statisticView.getElement(), Position.BEFOREEND);
 
-    const completeTasks = this._data.filter((task) => task.isArchive);
-    const daysCtx = this._container.querySelector(`.statistic__days`);
-    const tagsCtx = this._container.querySelector(`.statistic__tags`);
-    const colorsCtx = this._container.querySelector(`.statistic__colors`);
     const inputDate = this._container.querySelector(`.statistic__period-input`);
+    const daysCtx = this._container.querySelector(`.statistic__days`);
     const defaultDate = this._getDefaultDate();
+    const completeTasks = this._data.filter((task) => task.isArchive);
 
     flatpickr(inputDate, {
       altInput: true,
@@ -39,9 +37,19 @@ class StatisticController {
       }
     });
 
+    this.update(this._data);
+  }
+
+  update(data) {
+    const completeTasks = this._data.filter((task) => task.isArchive);
+    const daysCtx = this._container.querySelector(`.statistic__days`);
+    const tagsCtx = this._container.querySelector(`.statistic__tags`);
+    const colorsCtx = this._container.querySelector(`.statistic__colors`);
+    const defaultDate = this._getDefaultDate();
+
     drawDaysChart(daysCtx, defaultDate[0], defaultDate[1], completeTasks);
-    drawTagsChart(tagsCtx, this._data);
-    drawColorsChart(colorsCtx, this._data);
+    drawTagsChart(tagsCtx, data);
+    drawColorsChart(colorsCtx, data);
   }
 
   show() {

@@ -10,13 +10,15 @@ const COUNT_TASKS_LOAD = 8;
 let currentCountTasks = COUNT_TASKS_LOAD;
 
 class BoardController {
-  constructor(container) {
+  constructor(container, onDataChangeMain) {
     this._container = container;
     this._tasks = [];
     this._board = new BoardTasks();
     this._noTasks = new NoTasks();
     this._sort = new Sort();
     this._loadButton = new LoadButton();
+
+    this._onDataChangeMain = onDataChangeMain;
 
     this._taskListController = new TaskListController(this._board.getElement(), this._onDataChange.bind(this));
   }
@@ -106,6 +108,8 @@ class BoardController {
   _onDataChange(tasks) {
     this._tasks = [...tasks, ...this._tasks.slice(currentCountTasks)];
     this._renderTasks();
+
+    this._onDataChangeMain(this._tasks);
   }
 }
 
