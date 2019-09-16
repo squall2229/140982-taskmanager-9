@@ -1,82 +1,89 @@
-import getTasks from './data/tasks';
-import getFilters from './data/filters';
+import MainController from './controllers/main';
 
-import {render, Position} from './utils/render';
+const container = document.querySelector(`.main`);
+const mainController = new MainController(container);
 
-import Menu from './components/menu';
-import Search from './components/search';
-import Filters from './components/filters';
-import Board from './components/board';
-import Statistic from './components/statistic';
+mainController.init();
 
-import BoardController from './controllers/board';
-import SearchController from './controllers/search';
-import StatisticController from './controllers/statistic';
+// import getTasks from './data/tasks';
+// import getFilters from './data/filters';
 
-const tasksData = getTasks();
-const filtersData = getFilters(tasksData);
+// import {render, Position} from './utils/render';
 
-const menu = new Menu();
-const search = new Search();
-const board = new Board();
-const statistic = new Statistic();
-const filters = new Filters(filtersData);
+// import Menu from './components/menu';
+// import Search from './components/search';
+// import Filters from './components/filters';
+// import Board from './components/board';
+// import Statistic from './components/statistic';
 
-const main = document.querySelector(`.main`);
-const mainControl = document.querySelector(`.main__control`);
-const boardController = new BoardController(board.getElement());
+// import BoardController from './controllers/board';
+// import SearchController from './controllers/search';
+// import StatisticController from './controllers/statistic';
 
-const onSearchBackButtonClick = () => {
-  statistic.getElement().classList.add(`visually-hidden`);
-  searchController.hide();
-  boardController.show(tasksData);
-};
+// const tasksData = getTasks();
+// const filtersData = getFilters(tasksData);
 
-const showStatistic = () => {
-  statisticController.hide();
-  boardController.show(tasksData);
-};
+// const menu = new Menu();
+// const search = new Search();
+// const board = new Board();
+// const statistic = new Statistic();
+// const filters = new Filters(filtersData);
 
-const hideStatistic = () => {
-  boardController.hide();
-  statisticController.show();
-};
+// const main = document.querySelector(`.main`);
+// const mainControl = document.querySelector(`.main__control`);
+// const boardController = new BoardController(board.getElement());
 
-const createTask = () => {
-  boardController.createTask();
-  menu.getElement().querySelector(`#control__task`).checked = true;
-};
+// const onSearchBackButtonClick = () => {
+//   statistic.getElement().classList.add(`visually-hidden`);
+//   searchController.hide();
+//   boardController.show(tasksData);
+// };
 
-const actionById = {
-  'control__task': showStatistic,
-  'control__statistic': hideStatistic,
-  'control__new-task': createTask
-};
+// const showStatistic = () => {
+//   statisticController.hide();
+//   boardController.show(tasksData);
+// };
 
-const searchController = new SearchController(main, search, onSearchBackButtonClick);
-const statisticController = new StatisticController(main, tasksData);
+// const hideStatistic = () => {
+//   boardController.hide();
+//   statisticController.show();
+// };
 
-render(mainControl, menu.getElement(), Position.BEFOREEND);
-render(main, search.getElement(), Position.BEFOREEND);
-render(main, filters.getElement(), Position.BEFOREEND);
-render(main, board.getElement(), Position.BEFOREEND);
-statisticController.init();
-boardController.show(tasksData);
+// const createTask = () => {
+//   boardController.createTask();
+//   menu.getElement().querySelector(`#control__task`).checked = true;
+// };
 
-menu.getElement().addEventListener(`change`, (evt) => {
-  evt.preventDefault();
+// const actionById = {
+//   'control__task': showStatistic,
+//   'control__statistic': hideStatistic,
+//   'control__new-task': createTask
+// };
 
-  if (evt.target.tagName !== `INPUT`) {
-    return;
-  }
+// const searchController = new SearchController(main, search, onSearchBackButtonClick);
+// const statisticController = new StatisticController(main, tasksData);
 
-  actionById[evt.target.id]();
-});
+// render(mainControl, menu.getElement(), Position.BEFOREEND);
+// render(main, search.getElement(), Position.BEFOREEND);
+// render(main, filters.getElement(), Position.BEFOREEND);
+// render(main, board.getElement(), Position.BEFOREEND);
+// statisticController.init();
+// boardController.show(tasksData);
 
-search.getElement().addEventListener(`click`, () => {
-  statisticController.hide();
-  boardController.hide();
-  searchController.show(tasksData);
-});
+// menu.getElement().addEventListener(`change`, (evt) => {
+//   evt.preventDefault();
+
+//   if (evt.target.tagName !== `INPUT`) {
+//     return;
+//   }
+
+//   actionById[evt.target.id]();
+// });
+
+// search.getElement().addEventListener(`click`, () => {
+//   statisticController.hide();
+//   boardController.hide();
+//   searchController.show(tasksData);
+// });
 
 

@@ -52,7 +52,7 @@ class SearchController {
 
     this._searchResultInfo = new SearchResultInfo({title: text, count: tasks.length});
 
-    render(this._searchResultGroup.getElement(), this._searchResultInfo.getElement(), Position.AFTERBEGIN);
+    render(this._searchResult.getElement(), this._searchResultGroup.getElement(), Position.BEFOREEND);
 
     this._taskListController.setTasks(tasks);
   }
@@ -61,8 +61,8 @@ class SearchController {
     this.hide();
 
     render(this._container, this._searchResult.getElement(), Position.BEFOREEND);
+    render(this._searchResult.getElement(), this._searchResultInfo.getElement(), Position.BEFOREEND);
     render(this._searchResult.getElement(), this._searchResultGroup.getElement(), Position.BEFOREEND);
-    render(this._searchResultGroup.getElement(), this._searchResultInfo.getElement(), Position.AFTERBEGIN);
 
     this._searchResult.getElement().querySelector(`.result__back`)
       .addEventListener(`click`, () => {

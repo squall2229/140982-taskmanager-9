@@ -107,7 +107,6 @@ class BoardController {
     this._tasks = [...tasks, ...this._tasks.slice(currentCountTasks)];
     this._renderTasks();
   }
-
 }
 
 export default BoardController;
