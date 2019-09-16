@@ -8,7 +8,7 @@ import {
   getAmountArchiveTasks
 } from '../utils/filters';
 
-const FILTERS_TITLES = [
+export const FILTERS_TITLES = [
   `all`,
   `overdue`,
   `today`,
@@ -37,6 +37,8 @@ const getCountTaskByFilter = (filterTitle, tasks) => {
   return filtersCount[filterTitle](tasks);
 };
 
-const getFilters = (tasks) => FILTERS_TITLES.map((title) => addCountForFilters(title, tasks));
+const getFilters = (tasks) => {
+  return FILTERS_TITLES.map((title) => addCountForFilters(title, tasks));
+};
 
 export default getFilters;

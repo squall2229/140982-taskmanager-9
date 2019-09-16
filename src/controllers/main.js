@@ -1,30 +1,27 @@
 import getTasks from '../data/tasks';
-import getFilters from '../data/filters';
 
 import {render, Position} from '../utils/render';
 
 import Menu from '../components/menu';
 import Search from '../components/search';
-import Filters from '../components/filters';
 import Board from '../components/board';
 import Statistic from '../components/statistic';
 
 import BoardController from '../controllers/board';
 import SearchController from '../controllers/search';
 import StatisticController from '../controllers/statistic';
+import FiltersController from '../controllers/filters';
 
 class MainController {
   constructor(container) {
     this._container = container;
 
     this._tasksData = getTasks();
-    this._filtersData = getFilters(this._tasksData);
 
     this._menu = new Menu();
     this._search = new Search();
     this._board = new Board();
     this._statistic = new Statistic();
-    this._filters = new Filters(this._filtersData);
 
     this._onSearchBackButtonClick = this._onSearchBackButtonClick.bind(this);
     this._showStatistic = this._showStatistic.bind(this);
@@ -34,6 +31,7 @@ class MainController {
 
     this._boardController = new BoardController(this._board.getElement(), this._onDataChange);
     this._searchController = new SearchController(this._container, this._search, this._onSearchBackButtonClick);
+    this._filtersController = new FiltersController(this._container, this._tasksData);
     this._statisticController = new StatisticController(this._container, this._tasksData);
   }
 
@@ -46,7 +44,7 @@ class MainController {
 
     render(this._container.querySelector(`.main__control`), this._menu.getElement(), Position.BEFOREEND);
     render(this._container, this._search.getElement(), Position.BEFOREEND);
-    render(this._container, this._filters.getElement(), Position.BEFOREEND);
+    this._filtersController.init();
     render(this._container, this._board.getElement(), Position.BEFOREEND);
 
     this._statisticController.init();

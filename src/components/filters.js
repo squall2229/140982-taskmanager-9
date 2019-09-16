@@ -6,17 +6,18 @@ class Filters extends AbstractComponent {
     this._filterList = filterList;
   }
 
-  getFilterTemplate({title, count}) {
+  getFilterTemplate(title, count, index) {
     return `
     <input
       type="radio"
       id="filter__${title}"
       class="filter__input visually-hidden"
       name="filter"
-      checked
+      ${index === 0 ? `checked` : ``}
+      ${count === 0 ? `disabled` : ``}
     />
     <label for="filter__${title}" class="filter__label">
-      ${title} <span class="filter__${title}-count">${count}</span>
+      ${title} <span class="filter__${title}-count">${count ? count : 0}</span>
     </label>
   `.trim();
   }
@@ -24,7 +25,7 @@ class Filters extends AbstractComponent {
   getTemplate() {
     return `
       <section class="main__filter filter container">
-        ${this._filterList.map((filter) => this.getFilterTemplate(filter)).join(``)}
+        ${this._filterList.map((filter, index) => this.getFilterTemplate(filter, null, index)).join(``)}
       </section>
     `.trim();
   }
