@@ -30,9 +30,16 @@ class MainController {
     this._onDataChange = this._onDataChange.bind(this);
 
     this._boardController = new BoardController(this._board.getElement(), this._onDataChange);
-    this._searchController = new SearchController(this._container, this._search, this._onSearchBackButtonClick);
-    this._filtersController = new FiltersController(this._container, this._tasksData);
     this._statisticController = new StatisticController(this._container, this._tasksData);
+    this._searchController = new SearchController(this._container, this._search, this._onSearchBackButtonClick);
+    this._filtersController = new FiltersController(
+        this._container,
+        this._boardController,
+        this._statisticController,
+        this._tasksData,
+        this._onDataChange,
+        this._showStatistic
+    );
   }
 
   init() {
@@ -70,6 +77,7 @@ class MainController {
   _onDataChange(data) {
     this._taskData = data;
     this._statisticController.update(this._taskData);
+    this._filtersController.update(this._taskData);
   }
 
   _onSearchBackButtonClick() {
@@ -81,11 +89,13 @@ class MainController {
   _showStatistic() {
     this._statisticController.hide();
     this._boardController.show(this._tasksData);
+    this._menu.getElement().querySelector(`#control__task`).checked = true;
   }
 
   _hideStatistic() {
     this._boardController.hide();
     this._statisticController.show();
+    this._menu.getElement().querySelector(`#control__task`).checked = false;
   }
 
   _createTask() {

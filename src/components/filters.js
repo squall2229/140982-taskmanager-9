@@ -1,12 +1,13 @@
 import AbstractComponent from './abstract';
 
 class Filters extends AbstractComponent {
-  constructor(filterList) {
+  constructor(data) {
     super();
-    this._filterList = filterList;
+
+    this._data = data;
   }
 
-  getFilterTemplate(title, count, index) {
+  getFilterTemplate({title, count = 0}, index) {
     return `
     <input
       type="radio"
@@ -25,7 +26,7 @@ class Filters extends AbstractComponent {
   getTemplate() {
     return `
       <section class="main__filter filter container">
-        ${this._filterList.map((filter, index) => this.getFilterTemplate(filter, null, index)).join(``)}
+        ${Object.keys(this._data).map((title, index) => this.getFilterTemplate({title, count: this._data[title]}, index)).join(``)}
       </section>
     `.trim();
   }

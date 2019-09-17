@@ -1,22 +1,22 @@
 import isRepeat from './isRepeat';
 import {getAllTasks} from './tasks';
 
-export const getAmountAllTasks = (tasks) => getAllTasks(tasks).length;
+export const getAmountAllTasks = (tasks) => getAllTasks(tasks);
 
 export const getAmountOverDueTasks = (tasks) => {
-  return tasks.filter((task) => Date.now() - task.dueDate.getTime() > 0).length;
+  return tasks.filter((task) => Date.now() - task.dueDate.getTime() > 0);
 };
 
 export const getAmountTodayTasks = (tasks) => {
-  return tasks.filter((task) => new Date().getDate() === task.dueDate.getDate()).length;
+  return tasks.filter((task) => new Date().getDate() === task.dueDate.getDate());
 };
 
 export const getAmountFavoritesTasks = (tasks) => {
-  return tasks.filter((task) => task.isFavorite).length;
+  return tasks.filter((task) => task.isFavorite);
 };
 
 export const getAmountRepeatingTasks = (tasks) => {
-  return tasks.filter((task) => isRepeat(task.repeatingDays)).length;
+  return tasks.filter((task) => isRepeat(task.repeatingDays));
 };
 
 export const getAmountTagTasks = (tasks) => {
@@ -24,5 +24,5 @@ export const getAmountTagTasks = (tasks) => {
 };
 
 export const getAmountArchiveTasks = (tasks) => {
-  return tasks.filter((task) => task.isArchive).length;
+  return tasks.filter((task) => task.isArchive);
 };
