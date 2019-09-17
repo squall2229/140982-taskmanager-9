@@ -67,7 +67,7 @@ class FiltersController {
   }
 
   _renderView() {
-    this._container.append(this._filters.getElement());
+    render(this._container, this._filters.getElement(), Position.BEFOREEND);
 
     this._filters.getElement()
       .addEventListener(`change`, (evt) => {
